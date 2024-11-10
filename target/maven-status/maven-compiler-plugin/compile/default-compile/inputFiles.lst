@@ -1,2 +1,10 @@
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/AboutView.java
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/ConfigurationView.java
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/DashboardView.java
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/DocumentsView.java
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/GalleryView.java
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/HomeView.java
 /home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/MainView.java
 /home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/VehiclemanagementApplication.java
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/entities/Vehicle.java
+/home/andrea/Development/vehicle-management/main/src/main/java/com/andreabrun/vehiclemanagement/utils/PersistenceUtils.java
