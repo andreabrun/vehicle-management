@@ -20,13 +20,12 @@ public class ConfigurationView extends VerticalLayout {
 		button.addAttachListener( e -> {
 			Vehicle v = new Vehicle("Nome", "Marca", "Modello");
 			
-			// TODO: Sistemare salvataggio su file xml
-//			try {
-//				if(v != null)
-//					VehicleXMLService.marshalToXML(v, "filename.xml");
-//			} catch (JAXBException e1) {
-//				e1.printStackTrace();
-//			}
+			try {
+				if(v != null)
+					VehicleXMLService.marshalToXML(v, "persistence/vehicles/test-vehicle.xml");
+			} catch (JAXBException e1) {
+				e1.printStackTrace();
+			}
 			
 		});
 		

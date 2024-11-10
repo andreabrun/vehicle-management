@@ -63,11 +63,18 @@
 	        <artifactId>jaxb-api</artifactId>
 	        <version>2.3.1</version>
 	    </dependency>
+	    
+	    <dependency>
+		    <groupId>javax.activation</groupId>
+		    <artifactId>activation</artifactId>
+		    <version>1.1</version>
+		</dependency>
 	
 	    <!-- JAXB Runtime (needed for marshalling/unmarshalling) -->
 	    <dependency>
 	        <groupId>org.glassfish.jaxb</groupId>
 	        <artifactId>jaxb-runtime</artifactId>
+	        <version>2.3.3</version>
 	    </dependency>
 	</dependencies>
 	<dependencyManagement>
