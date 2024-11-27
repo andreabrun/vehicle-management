@@ -1,6 +1,6 @@
 package com.andreabrun.vehiclemanagement;
 
-import java.awt.List;
+import java.util.List;
 import java.util.ArrayList;
 
 import com.vaadin.flow.component.Unit;

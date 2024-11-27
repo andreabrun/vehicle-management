@@ -1,6 +1,7 @@
 package com.andreabrun.vehiclemanagement.entities;
 
-import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
+import com.andreabrun.vehiclemanagement.entities.annotations.UserFillable;
+import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -10,33 +11,41 @@ public class Vehicle {
 	
 	Long id;
 	
+	@UserFillable(label = "Nome")
 	String name;
 	
-	String make; // marca
+	@UserFillable(label = "Marca")
+	String brand; 
 	
-	String model; // modello
+	@UserFillable(label = "Modello")
+	String model; 
 	
+	@UserFillable(label = "Tipo veicolo")
 	String type;
 	
+	@UserFillable(label = "Tipo di alimentazione")
 	String powerSource;
 	
-	Double displacement;
+	@UserFillable(label = "Cilindrata")
+	String displacement;
 	
-	Double power;
+	@UserFillable(label = "Potenza")
+	String power;
 	
-	String numberPlate; // targa
+	@UserFillable(label = "Targa")
+	String numberPlate; 
 	
+	@UserFillable(label = "VIN")
 	String vin;
 	
 	public Vehicle() {
-		id = PersistenceUtils.getNextID();
-		name = "New Vehicle";
+		this("New Vehicle", null, null);
 	}
 	
-	public Vehicle(String name, String make, String model) {
-		id = PersistenceUtils.getNextID();
+	public Vehicle(String name, String brand, String model) {
+		id = PersistenceHelper.getNextID();
 		this.name = name;
-		this.make = make;
+		this.brand = brand;
 		this.model = model;
 	}
 	
@@ -55,20 +64,74 @@ public class Vehicle {
     }
     
     @XmlElement
-    public String getMake() {
-        return make;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setMake(String make) {
-        this.make = make;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
     
     @XmlElement
     public String getModel() {
-        return make;
+        return model;
+    }
+    
+    public void setModel(String model) {
+        this.model= model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    @XmlElement
+    public String getPowerSource() {
+		return powerSource;
+	}
+
+	public void setPowerSource(String powerSource) {
+		this.powerSource = powerSource;
+	}
+
+	@XmlElement
+	public String getDisplacement() {
+		return displacement;
+	}
+
+	public void setDisplacement(String displacement) {
+		this.displacement = displacement;
+	}
+
+	@XmlElement
+	public String getPower() {
+		return power;
+	}
+
+	public void setPower(String power) {
+		this.power = power;
+	}
+
+	@XmlElement
+	public String getNumberPlate() {
+		return numberPlate;
+	}
+
+	public void setNumberPlate(String numberPlate) {
+		this.numberPlate = numberPlate;
+	}
+
+	@XmlElement
+	public String getVin() {
+		return vin;
+	}
+
+	public void setVin(String vin) {
+		this.vin = vin;
+	}
+
+    @XmlElement
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

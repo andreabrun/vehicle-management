@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vehicle>
+    <id>0</id>
+    <make>Marca</make>
+    <model>Marca</model>
+    <name>Nome</name>
+</vehicle>
