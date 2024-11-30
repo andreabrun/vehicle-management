@@ -3,10 +3,13 @@ package com.andreabrun.vehiclemanagement.entities;
 import com.andreabrun.vehiclemanagement.entities.annotations.UserFillable;
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "vehicle")
 public class Vehicle {
 	
 	Long id;

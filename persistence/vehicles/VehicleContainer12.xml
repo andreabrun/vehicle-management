@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vehicleContainer>
+    <id>12</id>
+    <vehicle>
+        <brand>Nissan</brand>
+        <id>11</id>
+        <model>Terrano</model>
+        <name>Terrano</name>
+    </vehicle>
+</vehicleContainer>

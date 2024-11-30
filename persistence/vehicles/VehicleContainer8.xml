@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vehicleContainer>
+    <id>8</id>
+    <vehicle>
+        <brand>Kawasaki</brand>
+        <id>7</id>
+        <model>EL252</model>
+        <name>Eliminator</name>
+    </vehicle>
+</vehicleContainer>

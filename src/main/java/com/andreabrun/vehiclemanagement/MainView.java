@@ -1,8 +1,15 @@
 package com.andreabrun.vehiclemanagement;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 import java.util.ArrayList;
 
+import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
+import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -18,6 +25,7 @@ import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.server.VaadinSession;
 
 @PageTitle("Vehicle Managment")
 @Route(value="")
@@ -26,6 +34,9 @@ public class MainView extends AppLayout implements RouterLayout {
 	private static final long serialVersionUID = 1L;
 
 	public MainView() {
+		
+		VehicleSessionBean vsbean = new VehicleSessionBean();
+		VaadinSession.getCurrent().setAttribute(VehicleSessionBean.class, vsbean);
 		
 		DrawerToggle toggle = new DrawerToggle();
 
@@ -63,5 +74,19 @@ public class MainView extends AppLayout implements RouterLayout {
        
         addToNavbar(comboBox);
         
+	}
+	
+	public void init() {
+		
+		VaadinSession sesson = VaadinSession.getCurrent();
+		
+		PersistenceHelper ph = PersistenceHelper.getCurrent();
+		sesson.setAttribute(PersistenceHelper.class, ph);
+		
+		List<VehicleContainer> vc = VehicleContainer.findAll();
+		VehicleSessionBean vsb = new VehicleSessionBean();
+		vsb.setData(vc);
+		sesson.setAttribute(VehicleSessionBean.class, vsb);
+		
 	}
 }

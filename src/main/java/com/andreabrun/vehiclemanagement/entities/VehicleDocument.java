@@ -6,6 +6,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.lang.*;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,32 +16,39 @@ public class VehicleDocument {
 	
 	public static final String UNCATEGORIZED_DOCUMENT_KEY = "null";
 	
-	Long id;
+	long id;
 	
 	String key;
 	
 	LocalDate date;
 	
+	String mileage;
+	
 	String documentPath;
 	
-	Double charge;
+	String charge;
 	
 	public VehicleDocument() {
-		this(UNCATEGORIZED_DOCUMENT_KEY, LocalDate.now(), null, null);
+		this(UNCATEGORIZED_DOCUMENT_KEY, LocalDate.now(), null, null, null);
 	}
 	
 	public VehicleDocument(String key) {
-		this(key, LocalDate.now(), null, null);
+		this(key, LocalDate.now());
 	}
 	
 	public VehicleDocument(String key, LocalDate date) {
-		this(key, date, null, null);
+		this(key, date, null);
 	}
 	
-	public VehicleDocument(String key, LocalDate date, String documentPath, Double charge) {
+	public VehicleDocument(String key, LocalDate date, String mileage) {
+		this(key, date, mileage, null, null);
+	}
+	
+	public VehicleDocument(String key, LocalDate date, String mileage, String documentPath, String charge) {
 		this.id = PersistenceHelper.getNextID();
 		this.key = key;
 		this.date = date;
+		this.mileage = mileage;
 		this.documentPath = documentPath;
 		this.charge = charge;
 	}
@@ -56,6 +64,11 @@ public class VehicleDocument {
 	}
 	
 	@XmlElement
+	public String getMileage() {
+		return mileage;
+	}
+	
+	@XmlElement
 	public LocalDate getDate() {
 		return date;
 	}
@@ -66,7 +79,7 @@ public class VehicleDocument {
 	}
 	
 	@XmlElement
-	public Double getCharge() {
+	public String getCharge() {
 		return charge;
 	}
 }

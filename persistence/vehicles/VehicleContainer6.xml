@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vehicleContainer>
+    <id>6</id>
+    <vehicle>
+        <brand>Honda</brand>
+        <id>5</id>
+        <model>CB 500 F</model>
+        <name>Honda CB500F</name>
+    </vehicle>
+</vehicleContainer>
