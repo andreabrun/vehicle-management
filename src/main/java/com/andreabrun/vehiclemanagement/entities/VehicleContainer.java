@@ -1,19 +1,18 @@
 package com.andreabrun.vehiclemanagement.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.andreabrun.vehiclemanagement.entities.services.Persistable;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleXMLService;
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import io.micrometer.common.util.StringUtils;
 
 @XmlRootElement
 public class VehicleContainer implements Persistable {
@@ -25,11 +24,13 @@ public class VehicleContainer implements Persistable {
 	
 	Vehicle master;
 
-	String coverImagePath;
+	String coverImageName;
 	
 	List<String> configuredDuties;
 	
 	List<VehicleDuty> duties;
+	
+	String currentMileage;
 	
 	public VehicleContainer() {
 		this(null);
@@ -42,10 +43,15 @@ public class VehicleContainer implements Persistable {
 		duties = new ArrayList<VehicleDuty>();
 	}
 	
+	// XML GETTERS AND SETTERS
 	@XmlElement
     public Long getId() {
         return id;
     }
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
 	@XmlElement(name = "vehicle")
     public Vehicle getVehicle() {
@@ -57,43 +63,87 @@ public class VehicleContainer implements Persistable {
     }
 	
 	@XmlElement
-    public String getCoverImagePath() {
-        return coverImagePath;
+    public String getCoverImageName() {
+        return coverImageName;
     }
 	
-	public void setMasterCoverImage(String imageName) {
-        this.coverImagePath = imageName;
+	public void setCoverImageName(String coverImageName) {
+        this.coverImageName = coverImageName;
+    }
+	
+	@XmlElement
+    public String getCurrentMileage() {
+        return currentMileage;
+    }
+	
+	public void setCurrentMileage(String currentMileage) {
+        this.currentMileage = currentMileage;
     }
 	
 	@XmlElement
     public List<String> getConfiguredDuties() {
         return configuredDuties;
     }
+
+    public void setConfiguredDuties(List<String> configuredDuties) {
+        this.configuredDuties = configuredDuties;
+    }
 	
 	@XmlElement
     public List<VehicleDuty> getDuties() {
         return duties;
     }
+
+    public void setDuties(List<VehicleDuty> duties) {
+        this.duties = duties;
+    }
+    // END XML GETTERS AND SETTERS
+    
+    public boolean isCoverImagePresent() {
+    	return !StringUtils.isEmpty(getCoverImageName());
+    }
+    
+    public String getCoverImagePath() {
+        return getAssetsPath() + getCoverImageName();
+    }
 	
-	public List<VehicleDuty> getDuties(String key) {
-		if(!configuredDuties.contains(key)) 
-			return null;
+	public VehicleDuty getDuty(String key) {
 		
-		List<VehicleDuty> res = new ArrayList<VehicleDuty>();
 		for(VehicleDuty vd : duties) {
 			if(key.equals(vd.key))
-				res.add(vd);
+				return vd;
 		}
-		return res;
+		return null;
 	}
 	
 	private String getFileName() {
 		return PersistenceUtils.VEHICLE_PATH + PERSISTENCE_KEY + id.toString() + PersistenceUtils.EXT;
 	}
 	
+	private String getDocumentsPath() {
+		return PersistenceUtils.DOCUMENTS_PATH + PERSISTENCE_KEY + id.toString();
+	}
+	
+	private String getAssetsPath() {
+		return PersistenceUtils.ASSETS_PATH + PERSISTENCE_KEY + id.toString();
+	}
+	
+	private void createAssetsFolder() {
+		PersistenceUtils.createFolderIfNotPresent(getAssetsPath());
+	}
+	
+	private void createDocumentsFolder() {
+		PersistenceUtils.createFolderIfNotPresent(getDocumentsPath());
+	}
+	
 	public void persist() {
 		try {
+			
 			VehicleXMLService.marshalToXML(this, VehicleContainer.class, this.getFileName());
+			
+			createAssetsFolder();
+			createDocumentsFolder();
+			
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}

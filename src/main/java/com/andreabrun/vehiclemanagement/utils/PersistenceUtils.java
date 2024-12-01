@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.nimbusds.jose.util.ArrayUtils;
-
 public class PersistenceUtils {
 	
 	public static final String VEHICLE_PATH = "persistence/vehicles/";
@@ -19,6 +17,19 @@ public class PersistenceUtils {
 	public static boolean createFolder(String path) {
 		File f = new File(path);
 		return f.mkdir();
+	}
+	
+	public static boolean createFolderIfNotPresent(String folderPath) {
+		if(isFolderPresent(folderPath)) 
+			return true;
+		return createFolder(folderPath);
+	}
+	
+	public static boolean isFolderPresent(String folderPath) {
+		File f = new File(folderPath);
+		if(f.exists())
+			return true;
+		return false;
 	}
 	
 	public static boolean isFilePresent(String folderPath, String filename) {

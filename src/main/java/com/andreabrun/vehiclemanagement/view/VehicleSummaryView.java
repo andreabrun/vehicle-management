@@ -1,19 +1,20 @@
 package com.andreabrun.vehiclemanagement.view;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.time.LocalDate;
 
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
-import com.vaadin.flow.component.Component;
+import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
+import com.andreabrun.vehiclemanagement.entities.VehicleDuty;
+import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinService;
 
 import io.micrometer.common.util.StringUtils;
 
@@ -21,9 +22,10 @@ public class VehicleSummaryView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
     
-    private static final String defaultCoverImagePath = "./images/altcaricon.webp";
+    private static final String DEFAULT_COVERIMAGE_NAME = "altcaricon.webp";
 
 	public VehicleSummaryView(VehicleContainer vc, int width) {
+		
 		super();
 		
 		Vehicle vehicle = vc.getVehicle();
@@ -31,19 +33,45 @@ public class VehicleSummaryView extends VerticalLayout {
 		String name = vehicle.getName();
 		add(new H2(name));
 
-		String coverImagePath = vc.getCoverImagePath();
+		
 		Image coverImage = null;
-		if(StringUtils.isNotEmpty(coverImagePath)) {
+		if(vc.isCoverImagePresent()) {
+			String coverImagePath = vc.getCoverImagePath();
 			coverImage = new Image(coverImagePath, "Cover image");
 		} else {
-			coverImage = new Image(defaultCoverImagePath, "Cover image");
+			coverImage = new Image(PersistenceUtils.ASSETS_PATH + DEFAULT_COVERIMAGE_NAME, "Cover image");
+			VaadinService.getCurrent();
 		}
 		add(coverImage);
 		
-		add(new H4("185000 km"));
-		add(new H4("Ultimo tagliando: 04/2024 - 175000 km"));
-		add(new H4("Scadenza revisione: 05/2025"));
-		add(new H4("Scadenza assicurazione: 15/07/2025"));
+		String currentMileage = vc.getCurrentMileage();
+		if(StringUtils.isNotEmpty(currentMileage))
+			add(new H4(currentMileage));
+		
+		for (String key : vc.getConfiguredDuties()) {
+			
+			VehicleDuty vd = vc.getDuty(key);
+			
+			VehicleDocument doc = null;
+			
+			if(vd != null) {
+				doc = vd.getLatest();
+				
+				if(doc != null) {
+					
+					LocalDate ld = doc.getDate();
+					String md = doc.getMileage();
+					
+					String date = ld != null ? ld.toString() : "";
+					String mileage = md != null ? md : "";
+					
+					add(new H4(key + " " + date + " " + mileage));
+				}
+			}
+			
+			
+		}
+		
 		setWidth(width, Unit.PIXELS);
         
 	}

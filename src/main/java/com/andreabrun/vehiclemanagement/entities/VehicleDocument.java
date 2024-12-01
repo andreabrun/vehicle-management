@@ -1,15 +1,11 @@
 package com.andreabrun.vehiclemanagement.entities;
 
-import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
-
-import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.lang.*;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 
 @XmlRootElement
 public class VehicleDocument {

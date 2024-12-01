@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.annotations.UserFillable;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;

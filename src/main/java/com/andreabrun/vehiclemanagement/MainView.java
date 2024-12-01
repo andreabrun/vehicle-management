@@ -1,24 +1,12 @@
 package com.andreabrun.vehiclemanagement;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-
-import java.util.ArrayList;
-
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
@@ -32,11 +20,16 @@ import com.vaadin.flow.server.VaadinSession;
 public class MainView extends AppLayout implements RouterLayout {
 
 	private static final long serialVersionUID = 1L;
+	
+	private VehicleSessionBean vsbean;
+	
+	private ComboBox<VehicleContainer> vcComboBox;
 
 	public MainView() {
 		
-		VehicleSessionBean vsbean = new VehicleSessionBean();
-		VaadinSession.getCurrent().setAttribute(VehicleSessionBean.class, vsbean);
+		init();
+		
+		initComponents();
 		
 		DrawerToggle toggle = new DrawerToggle();
 
@@ -62,18 +55,6 @@ public class MainView extends AppLayout implements RouterLayout {
         addToDrawer(scroller);
 
         addToNavbar(toggle, title);
-        
-        ComboBox<String> comboBox = new ComboBox<>();
-        ArrayList<String> items = new ArrayList<String>();
-        items.add("Honda Jazz");
-        items.add("Nissan Terrano");
-        items.add("Honda CB500F");
-        items.add("Kawasaki EL252");
-        comboBox.setItems(items);
-        comboBox.getStyle().set("position", "absolute").set("right", "0").set("margin", "5px");
-       
-        addToNavbar(comboBox);
-        
 	}
 	
 	public void init() {
@@ -83,10 +64,38 @@ public class MainView extends AppLayout implements RouterLayout {
 		PersistenceHelper ph = PersistenceHelper.getCurrent();
 		sesson.setAttribute(PersistenceHelper.class, ph);
 		
-		List<VehicleContainer> vc = VehicleContainer.findAll();
 		VehicleSessionBean vsb = new VehicleSessionBean();
-		vsb.setData(vc);
+		vsb.init();
 		sesson.setAttribute(VehicleSessionBean.class, vsb);
 		
+		this.vsbean = vsb;
+	}
+	
+	public void initComponents() {
+		vcComboBox = new ComboBox<>();
+		vcComboBox.setItems(vsbean.getData());
+		vcComboBox.setItemLabelGenerator(
+                vc -> vc.getVehicle().getName()
+        );
+		vcComboBox.getStyle().set("position", "absolute").set("right", "0").set("margin", "5px");
+       
+        vsbean.addPropertyChangeListener(evt -> {
+            if (VehicleSessionBean.VEHICLECONTAINERS.equals(evt.getPropertyName())) {
+                update();
+            }
+        });
+        
+        vsbean.addPropertyChangeListener(evt -> {
+            if (VehicleSessionBean.SELECTED.equals(evt.getPropertyName())) {
+                vcComboBox.setValue(vsbean.getSelected());
+            }
+        });
+        
+        addToNavbar(vcComboBox);
+        
+	}
+	
+	public void update() {
+		vcComboBox.setItems(vsbean.getData());
 	}
 }
