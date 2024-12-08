@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
-import com.andreabrun.vehiclemanagement.utils.VehicleDocumentComparators;
+import com.andreabrun.vehiclemanagement.utils.Comparators;
 
 @XmlRootElement
 public class VehicleDuty {
@@ -68,7 +68,7 @@ public class VehicleDuty {
 		if(documents.isEmpty())
 			return null;
 		
-		Collections.sort(documents, VehicleDocumentComparators.DATE);
+		Collections.sort(documents, Comparators.VEHICLE_DOCUMENT_DATE);
 		return documents.get(documents.size() - 1);
 	}
 }

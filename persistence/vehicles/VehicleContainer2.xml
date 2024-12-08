@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vehicleContainer>
+    <id>2</id>
+    <vehicle>
+        <brand>Honda</brand>
+        <displacement>1339</displacement>
+        <id>1</id>
+        <model>Jazz</model>
+        <name>Hondina</name>
+        <numberPlate>DB88844</numberPlate>
+        <power>99</power>
+        <powerSource>Benzina</powerSource>
+        <type>Utilitaria</type>
+        <vin></vin>
+    </vehicle>
+    <coverImageName>hondina.png</coverImageName>
+</vehicleContainer>

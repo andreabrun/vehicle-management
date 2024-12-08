@@ -104,7 +104,7 @@ public class VehicleContainer implements Persistable {
     }
     
     public String getCoverImagePath() {
-        return getAssetsPath() + getCoverImageName();
+        return getAssetsPath() + "/" + getCoverImageName();
     }
 	
 	public VehicleDuty getDuty(String key) {

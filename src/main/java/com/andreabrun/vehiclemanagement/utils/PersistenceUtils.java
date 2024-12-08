@@ -12,6 +12,8 @@ public class PersistenceUtils {
 	public static final String DOCUMENTS_PATH = "persistence/documents/";
 	public static final String PERSISTENCEHELPER_PATH = "persistence/persistence/";
 	
+	public static final String ASSETS_KEY = "asset";
+	
 	public static final String EXT = ".xml";
 	
 	public static boolean createFolder(String path) {

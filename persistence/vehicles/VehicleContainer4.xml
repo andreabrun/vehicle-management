@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vehicleContainer>
+    <id>4</id>
+    <vehicle>
+        <brand>Nissan</brand>
+        <displacement>2669</displacement>
+        <id>3</id>
+        <model>Terrano II</model>
+        <name>Terrano</name>
+        <numberPlate>BS687MV</numberPlate>
+        <power>125 CV</power>
+        <powerSource>Diesel</powerSource>
+        <type>Fuoristrada</type>
+        <vin></vin>
+    </vehicle>
+</vehicleContainer>

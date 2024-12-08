@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.andreabrun.vehiclemanagement.entities.annotations.UserFillable;
+import com.andreabrun.vehiclemanagement.utils.Comparators;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -15,23 +16,16 @@ import io.micrometer.common.util.StringUtils;
 
 public class InputFormUtils {
 	
-	public static Map<String, String> getUserFillableFields(Class<?> clazz) {
+	private static Map<UserFillable, String> getUserFillableFields(Class<?> clazz) {
 		
-		Map<String, String> res = new HashMap<String, String>();
+		Map<UserFillable, String> res = new HashMap<UserFillable, String>();
 		
 		Field[] fields = clazz.getDeclaredFields();
 		
         for(Field f : fields) {
         	UserFillable annotation = f.getAnnotation(UserFillable.class);
         	if(annotation != null) {
-        		
-        		String name = f.getName();
-        		String label = annotation.label();
-        		
-        		if(StringUtils.isEmpty(label)) {
-        			label = name;
-        		}
-        		res.put(name, label);
+        		res.put(annotation, f.getName());
         	}
         }
         
@@ -42,11 +36,20 @@ public class InputFormUtils {
 		
 		List<Component> res = new ArrayList<Component>();
         
-        Map<String, String> fields = getUserFillableFields(clazz);
+        Map<UserFillable, String> fields = getUserFillableFields(clazz);
+        
+        List<UserFillable> keys = new ArrayList<UserFillable>();
+        keys.addAll(fields.keySet());
+        keys.sort(Comparators.USER_FILLABLE_ORDER);
 
-        for(String key : fields.keySet()) {
-        	TextField tf = new TextField(fields.get(key));
-            binder.bind(tf, key);
+        for(UserFillable key : keys) {
+        	
+        	String label = key.label();
+        	if(StringUtils.isEmpty(label))
+        		label =  fields.get(key);
+        	
+        	TextField tf = new TextField(label);
+            binder.bind(tf, fields.get(key));
             res.add(tf);
         }
         

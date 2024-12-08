@@ -1,12 +1,9 @@
 package com.andreabrun.vehiclemanagement;
 
-import com.andreabrun.vehiclemanagement.entities.Vehicle;
-import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
 import com.andreabrun.vehiclemanagement.form.AddVehicleFormView;
-import com.andreabrun.vehiclemanagement.form.VehicleFormView;
+import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -42,6 +39,9 @@ public class ConfigurationView extends VerticalLayout {
 		});
 		
 		add(buttonOpenAddVehicle);
+		
+		UploadFormView uifv = new UploadFormView(1, UploadFormView.TYPE_IMAGE);
+		add(uifv);
 		
 	}
 	

@@ -1,20 +1,18 @@
 package com.andreabrun.vehiclemanagement.view;
 
-import java.io.File;
 import java.time.LocalDate;
 
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.VehicleDuty;
+import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.VaadinService;
 
 import io.micrometer.common.util.StringUtils;
 
@@ -37,11 +35,11 @@ public class VehicleSummaryView extends VerticalLayout {
 		Image coverImage = null;
 		if(vc.isCoverImagePresent()) {
 			String coverImagePath = vc.getCoverImagePath();
-			coverImage = new Image(coverImagePath, "Cover image");
+			coverImage = ComponentsUtils.getImageFromPath(coverImagePath);
 		} else {
-			coverImage = new Image(PersistenceUtils.ASSETS_PATH + DEFAULT_COVERIMAGE_NAME, "Cover image");
-			VaadinService.getCurrent();
+			coverImage = ComponentsUtils.getImageFromPath(PersistenceUtils.ASSETS_PATH + DEFAULT_COVERIMAGE_NAME);
 		}
+		coverImage.setWidth(width, Unit.PIXELS);
 		add(coverImage);
 		
 		String currentMileage = vc.getCurrentMileage();

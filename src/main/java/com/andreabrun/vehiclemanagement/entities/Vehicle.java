@@ -1,44 +1,41 @@
 package com.andreabrun.vehiclemanagement.entities;
 
-import com.andreabrun.vehiclemanagement.entities.annotations.UserFillable;
-import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
-
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.andreabrun.vehiclemanagement.entities.annotations.UserFillable;
+import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 
 @XmlRootElement(name = "vehicle")
 public class Vehicle {
 	
 	Long id;
 	
-	@UserFillable(label = "Nome")
+	@UserFillable(label = "Nome", order = 0)
 	String name;
 	
-	@UserFillable(label = "Marca")
+	@UserFillable(label = "Marca", order = 1)
 	String brand; 
 	
-	@UserFillable(label = "Modello")
+	@UserFillable(label = "Modello", order = 2)
 	String model; 
 	
-	@UserFillable(label = "Tipo veicolo")
+	@UserFillable(label = "Tipo veicolo", order = 3)
 	String type;
 	
-	@UserFillable(label = "Tipo di alimentazione")
+	@UserFillable(label = "Tipo di alimentazione", order = 4)
 	String powerSource;
 	
-	@UserFillable(label = "Cilindrata")
+	@UserFillable(label = "Cilindrata", order = 5)
 	String displacement;
 	
-	@UserFillable(label = "Potenza")
+	@UserFillable(label = "Potenza", order = 6)
 	String power;
 	
-	@UserFillable(label = "Targa")
+	@UserFillable(label = "Targa", order = 7)
 	String numberPlate; 
 	
-	@UserFillable(label = "VIN")
+	@UserFillable(label = "VIN", order = 8)
 	String vin;
 	
 	public Vehicle() {
