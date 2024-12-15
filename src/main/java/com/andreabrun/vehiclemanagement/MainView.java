@@ -78,6 +78,10 @@ public class MainView extends AppLayout implements RouterLayout {
                 vc -> vc.getVehicle().getName()
         );
 		vcComboBox.getStyle().set("position", "absolute").set("right", "0").set("margin", "5px");
+		
+		vcComboBox.addValueChangeListener(e -> {
+			vsbean.setSelected(e.getValue());
+		});
        
         vsbean.addPropertyChangeListener(evt -> {
             if (VehicleSessionBean.VEHICLECONTAINERS.equals(evt.getPropertyName())) {

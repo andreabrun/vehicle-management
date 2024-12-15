@@ -1,9 +1,14 @@
 package com.andreabrun.vehiclemanagement.utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 
 public class PersistenceUtils {
 	
@@ -27,6 +32,27 @@ public class PersistenceUtils {
 		return createFolder(folderPath);
 	}
 	
+	public static void delete(String path) {
+		File f = new File(path);
+		_delete(f);
+	}
+	
+	private static void _delete(File f) {
+		
+		if (f.isDirectory()) {
+            File[] fs = f.listFiles();
+            for (File file : fs) {
+                if (file.isDirectory()) {
+                	_delete(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+		
+        f.delete();
+	}
+	
 	public static boolean isFolderPresent(String folderPath) {
 		File f = new File(folderPath);
 		if(f.exists())
@@ -41,12 +67,24 @@ public class PersistenceUtils {
 		return false;
 	}
 	
-	public static List<String> getFilesInFolder(String path) {
+	public static List<String> getFilesInFolder(String path, boolean fullPath) {
 		File f = new File(path);
 		String[] list = f.list();
-		if(list != null)
-			return Arrays.asList(f.list());
+		if(list != null) {
+			if(!fullPath) 
+				return Arrays.asList(f.list());
+			
+			List<String> res = new ArrayList<String>();
+			for(String fname : list) {
+				res.add(path + "/" + fname);
+			}
+			return res;
+		}
 		return null;
+	}
+	
+	public static List<String> getFilesInFolder(String path) {
+		return getFilesInFolder(path, false);
 	}
 	
 	public static List<String> getFilesInFolderWithKey(String path, String key) {
@@ -65,6 +103,48 @@ public class PersistenceUtils {
 		File oldf = new File(oldPath);
 		File newf = new File(newPath);
 		return oldf.renameTo(newf);
+	}
+	
+	/**
+	 * @param MemoryBuffer buffer
+	 * @param VehicleContainer vc
+	 * Saves the image in the correct folder of the VehicleContainer given as parameter.
+	 * @return the file name or null if the saving does not end successfully
+	 */
+	public static String saveUploadedImage(MemoryBuffer buffer, VehicleContainer vc) {
+		
+		String res = null;
+		
+		String inputName = buffer.getFileName();
+    	int indexOfPoint = inputName.lastIndexOf('.');
+    	String extension = "";
+    	
+    	if(indexOfPoint > 0)
+    		extension = inputName.substring(indexOfPoint);
+    	
+    	String fileName = PersistenceUtils.ASSETS_KEY + PersistenceHelper.getNextID() + extension;
+    	
+    	// Create the target file
+        File targetFile = new File(vc.getAssetsPath(), fileName);
+
+        // Write the content of the MemoryBuffer to the file
+        try (
+        	InputStream inputStream = buffer.getInputStream();
+        	FileOutputStream outputStream = new FileOutputStream(targetFile)) {
+
+            byte[] bufferBytes = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = inputStream.read(bufferBytes)) != -1) {
+                outputStream.write(bufferBytes, 0, bytesRead);
+            }
+            
+            res = targetFile.getName();
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
+        
+        return res;
 	}
 
 }

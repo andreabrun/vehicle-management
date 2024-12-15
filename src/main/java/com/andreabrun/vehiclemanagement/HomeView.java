@@ -22,7 +22,7 @@ public class HomeView extends VerticalLayout {
 		FlexLayout vehiclesLayout = new FlexLayout();
 
 		for(VehicleContainer vc : vsbean.getData()) {
-			VerticalLayout vehicleSingleLayout = new VehicleSummaryView(vc, 400);
+			VerticalLayout vehicleSingleLayout = new VehicleSummaryView(vc);
 			vehiclesLayout.add(vehicleSingleLayout);
 		}
 		

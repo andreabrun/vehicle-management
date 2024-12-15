@@ -116,24 +116,40 @@ public class VehicleContainer implements Persistable {
 		return null;
 	}
 	
-	private String getFileName() {
+	@Override
+	public String getFileName() {
 		return PersistenceUtils.VEHICLE_PATH + PERSISTENCE_KEY + id.toString() + PersistenceUtils.EXT;
 	}
 	
-	private String getDocumentsPath() {
+	public String getDocumentsPath() {
 		return PersistenceUtils.DOCUMENTS_PATH + PERSISTENCE_KEY + id.toString();
 	}
 	
-	private String getAssetsPath() {
+	public String getAssetsPath() {
 		return PersistenceUtils.ASSETS_PATH + PERSISTENCE_KEY + id.toString();
 	}
 	
-	private void createAssetsFolder() {
+	public void createAssetsFolder() {
 		PersistenceUtils.createFolderIfNotPresent(getAssetsPath());
 	}
 	
-	private void createDocumentsFolder() {
+	public void deleteAssetsFolder() {
+		PersistenceUtils.delete(getAssetsPath());
+	}
+	
+	public void createDocumentsFolder() {
 		PersistenceUtils.createFolderIfNotPresent(getDocumentsPath());
+	}
+	
+	public void deleteDocumentsFolder() {
+		PersistenceUtils.delete(getDocumentsPath());
+	}
+	
+	
+	public void delete() {
+		deleteAssetsFolder();
+		deleteDocumentsFolder();
+		PersistenceUtils.delete(getFileName());
 	}
 	
 	public void persist() {

@@ -59,7 +59,7 @@ public class PersistenceHelper implements Persistable {
 		return id;
 	}
 	
-	private String getFileName() {
+	public String getFileName() {
 		return PERSISTENCEHELPER_FILENAME;
 	}
 	

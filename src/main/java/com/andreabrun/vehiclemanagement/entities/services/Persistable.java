@@ -4,8 +4,6 @@ public interface Persistable {
 
 	public void persist();
 	
-	private String getFileName() {
-		return null;
-	}
+	public String getFileName();
 	
 }
