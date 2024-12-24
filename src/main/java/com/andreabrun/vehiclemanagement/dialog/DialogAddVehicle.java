@@ -13,7 +13,7 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 
-public class DialogAddNewVehicle extends Dialog {
+public class DialogAddVehicle extends Dialog {
 	
 	private static final long serialVersionUID = 1L;
 	public final String title = "New Vehicle";
@@ -26,12 +26,12 @@ public class DialogAddNewVehicle extends Dialog {
 	private VehicleFormView form;
 	private UploadFormView coverImageForm;
 	
-	public DialogAddNewVehicle() {
+	public DialogAddVehicle() {
 		
 		init();
 		
 		setHeaderTitle(title);
-		form = new VehicleFormView(v);
+		form = new VehicleFormView(v, vc);
 		add(form);
 		
 		H4 coverImageH4 = new H4("Upload cover image");

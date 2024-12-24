@@ -3,11 +3,12 @@ package com.andreabrun.vehiclemanagement.form;
 import java.util.List;
 
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
+import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 
-public class VehicleFormView extends VerticalLayout {
+public class VehicleFormView extends VerticalLayout implements InputForm<Vehicle> {
 
     private static final long serialVersionUID = 1L;
     
@@ -16,18 +17,20 @@ public class VehicleFormView extends VerticalLayout {
     private BeanValidationBinder<Vehicle> binder;
     
     private Vehicle vehicle;
+    private VehicleContainer vc;
     
     public VehicleFormView() {
-		this(new Vehicle());
+		this(new Vehicle(), null);
     }
 
-	public VehicleFormView(Vehicle vehicle) {
+	public VehicleFormView(Vehicle vehicle, VehicleContainer vc) {
 		
 		this.vehicle = vehicle;
+		this.vc = vc;
 		
         binder = new BeanValidationBinder<>(Vehicle.class);
 
-        List<Component> inputComponents = InputFormUtils.createInputComponents(Vehicle.class, binder);
+        List<Component> inputComponents = InputFormUtils.createInputComponents(Vehicle.class, binder, vc);
         
         binder.readBean(this.vehicle);
         

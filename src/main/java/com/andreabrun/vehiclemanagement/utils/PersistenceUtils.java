@@ -18,8 +18,11 @@ public class PersistenceUtils {
 	public static final String PERSISTENCEHELPER_PATH = "persistence/persistence/";
 	
 	public static final String ASSETS_KEY = "asset";
+	public static final String DOCUMENTS_KEY = "document";
 	
 	public static final String EXT = ".xml";
+	
+	public static final String SEPARATOR = "|-|";
 	
 	public static boolean createFolder(String path) {
 		File f = new File(path);
@@ -103,6 +106,11 @@ public class PersistenceUtils {
 		File oldf = new File(oldPath);
 		File newf = new File(newPath);
 		return oldf.renameTo(newf);
+	}
+	
+
+	public static String saveUploadedDocuments(MemoryBuffer buffer, VehicleContainer vc) {
+		return null;
 	}
 	
 	/**

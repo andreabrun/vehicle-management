@@ -1,6 +1,7 @@
 package com.andreabrun.vehiclemanagement;
 
-import com.andreabrun.vehiclemanagement.dialog.DialogAddNewVehicle;
+import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicle;
+import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicleDocumentType;
 import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicle;
 import com.andreabrun.vehiclemanagement.dialog.DialogEditVehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
@@ -13,7 +14,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
 @Route(value="/configuration", layout = MainView.class)
-public class ConfigurationView extends VerticalLayout implements VehicleManagementPage {
+public class ConfigurationView extends VerticalLayout implements VehicleManagementVehicleContainerPage {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -25,9 +26,13 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	Button buttonOpenDeleteVehicle;
 	Button buttonOpenEditVehicle;
 	
-	DialogAddNewVehicle dialogAddNewVehicle;
+	Button buttonOpenAddVehicleDocumentType;
+	
+	DialogAddVehicle dialogAddVehicle;
 	DialogDeleteVehicle dialogDeleteVehicle;
 	DialogEditVehicle dialogEditVehicle;
+	
+	DialogAddVehicleDocumentType dialogAddVehicleDocumentType;
 	
 	public ConfigurationView() {
 		init();
@@ -57,7 +62,7 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	
 	private void initComponents() {
 		initDialogs();
-		add(dialogAddNewVehicle);
+		add(dialogAddVehicle);
 		add(dialogDeleteVehicle);
 		add(dialogEditVehicle);
 		
@@ -73,7 +78,7 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		// ADD NEW VEHICLE
 		buttonOpenAddVehicle = new Button("Aggiungi veicolo");
 		buttonOpenAddVehicle.addClickListener( e -> {
-			dialogAddNewVehicle.open();
+			dialogAddVehicle.open();
 		});
 		buttonOpenAddVehicle.getStyle().set("margin", "5px");
 		vehiclesConfiguration.add(buttonOpenAddVehicle);
@@ -86,13 +91,21 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		buttonOpenAddVehicle.getStyle().set("margin", "5px");
 		vehiclesConfiguration.add(buttonOpenDeleteVehicle);
 		
-		// DELETE VEHICLE
+		// EDIT VEHICLE
 		buttonOpenEditVehicle = new Button("Modifica veicolo");
 		buttonOpenEditVehicle.addClickListener( e -> {
 			dialogEditVehicle.open();
 		});
 		buttonOpenEditVehicle.getStyle().set("margin", "5px");
 		vehiclesConfiguration.add(buttonOpenEditVehicle);
+		
+		// EDIT VEHICLE
+		buttonOpenAddVehicleDocumentType = new Button("Aggiungi nuovo tipo di documento");
+		buttonOpenAddVehicleDocumentType.addClickListener( e -> {
+			dialogAddVehicleDocumentType.open();
+		});
+		buttonOpenAddVehicleDocumentType.getStyle().set("margin", "5px");
+		vehiclesConfiguration.add(buttonOpenAddVehicleDocumentType);
 		
 		vehiclesConfiguration.setWidthFull();
 		vehiclesConfiguration.setFlexWrap(FlexLayout.FlexWrap.WRAP);
@@ -103,8 +116,10 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	}
 	
 	private void initDialogs() {
-		dialogAddNewVehicle = new DialogAddNewVehicle();
+		dialogAddVehicle = new DialogAddVehicle();
 		dialogDeleteVehicle = new DialogDeleteVehicle(vc);
 		dialogEditVehicle = new DialogEditVehicle(vc);
+		
+		dialogAddVehicleDocumentType = new DialogAddVehicleDocumentType(vc);
 	}
 }

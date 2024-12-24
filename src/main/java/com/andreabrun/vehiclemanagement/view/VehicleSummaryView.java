@@ -1,11 +1,8 @@
 package com.andreabrun.vehiclemanagement.view;
 
-import java.time.LocalDate;
-
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
-import com.andreabrun.vehiclemanagement.entities.VehicleDuty;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.vaadin.flow.component.Unit;
@@ -14,8 +11,6 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-
-import io.micrometer.common.util.StringUtils;
 
 public class VehicleSummaryView extends VerticalLayout {
 
@@ -34,9 +29,10 @@ public class VehicleSummaryView extends VerticalLayout {
 		
 		String name = vehicle.getName();
 		H2 title = new H2(name);
-		title.getStyle().set("height", "40px").set("width", WIDTH + "px").set("position", "sticky").set("top", "0").set("text-align", "center");
+		title.getStyle().set("height", "40px").set("position", "sticky").set("top", "0").set("text-align", "center");
+		title.setWidthFull();
 		// LAYOUT DEBUG
-		//title.getStyle().set("border", "solid");
+		title.getStyle().set("border", "solid");
 		add(title);
 		
 		Div coverImageDiv = new Div();
@@ -48,12 +44,27 @@ public class VehicleSummaryView extends VerticalLayout {
 		} else {
 			coverImage = ComponentsUtils.getImageFromPath(PersistenceUtils.ASSETS_PATH + DEFAULT_COVERIMAGE_NAME);
 		}
-		coverImage.getStyle().set("width", WIDTH + "px");
+		coverImage.setWidthFull();
 		coverImageDiv.add(coverImage);
-		coverImageDiv.getStyle().set("overflow", "hidden").set("align-items", "center").set("margin", "5px")
-			.set("width", WIDTH + "px").set("height", (HEIGHT / 2) + "px").set("vertical-align", "middle");
+		coverImageDiv.getStyle().set("overflow", "hidden").set("align-items", "center").set("margin", "5px").set("vertical-align", "center");
+		coverImageDiv.setWidthFull();
+		coverImageDiv.setHeight(HEIGHT / 2 + "px");
+			
+		
+		// LAYOUT DEBUG
+		coverImageDiv.getStyle().set("border", "solid");
 		add(coverImageDiv);
 		
+		String mileageContent = "km: ";
+		
+		VehicleDocument latestDocument = vc.getLatestVehicleDocument();
+		if(latestDocument != null) {
+			String mileage = latestDocument.getMileage().toString();
+			mileageContent += mileage;
+		}
+		add(new H4(mileageContent));
+		
+		/*
 		String currentMileage = vc.getCurrentMileage();
 		if(StringUtils.isNotEmpty(currentMileage))
 			add(new H4(currentMileage));
@@ -73,20 +84,21 @@ public class VehicleSummaryView extends VerticalLayout {
 					String md = doc.getMileage();
 					
 					String date = ld != null ? ld.toString() : "";
-					String mileage = md != null ? md : "";
+					//String mileage = md != null ? md : "";
 					
-					add(new H4(key + " " + date + " " + mileage));
+					//add(new H4(key + " " + date + " " + mileage));
 				}
 			}
 			
 			
 		}
+		*/
 		
 		setWidth(WIDTH, Unit.PIXELS);
         setHeight(HEIGHT, Unit.PIXELS);
         getStyle().set("overflow", "hidden").set("align-items", "center").set("margin", "5px");
         
         // LAYOUT DEBUG
-        //getStyle().set("background-color", "green").set("border-style", "solid");
+        getStyle().set("border-style", "solid");
 	}
 }

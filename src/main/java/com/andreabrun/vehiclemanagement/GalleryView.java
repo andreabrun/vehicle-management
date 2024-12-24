@@ -21,7 +21,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
 @Route(value="/gallery", layout = MainView.class)
-public class GalleryView extends VerticalLayout implements VehicleManagementPage {
+public class GalleryView extends VerticalLayout implements VehicleManagementVehicleContainerPage {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class GalleryView extends VerticalLayout implements VehicleManagementPage
 	private VehicleContainer vc;
 	
 	H1 h1Title;
-	FlexLayout vehiclesGallery;
+	FlexLayout vehicleGallery;
 	UploadFormView uploadImageForm;
 	
 	String title = "Gallery";
@@ -66,13 +66,13 @@ public class GalleryView extends VerticalLayout implements VehicleManagementPage
 			add(uploadImageH4, uploadImageForm, buttonUpload);
 		}
 		
-		initVehiclesConfiguration();
-		add(vehiclesGallery);
+		initVehicleGallery();
+		add(vehicleGallery);
 	}
 	
-	private void initVehiclesConfiguration() {
+	private void initVehicleGallery() {
 		
-		vehiclesGallery = new FlexLayout();
+		vehicleGallery = new FlexLayout();
 
 		if(vc != null) {
 			String assetsPath = vc.getAssetsPath();
@@ -81,12 +81,12 @@ public class GalleryView extends VerticalLayout implements VehicleManagementPage
 			for(String imgPath : filesInFolder) {
 				Image img = ComponentsUtils.getImageFromPath(imgPath);
 				img.setHeight(300, Unit.PIXELS);
-				vehiclesGallery.add(img);
+				vehicleGallery.add(img);
 			}
 		}
 		
-		vehiclesGallery.setWidthFull();
-		vehiclesGallery.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+		vehicleGallery.setWidthFull();
+		vehicleGallery.setFlexWrap(FlexLayout.FlexWrap.WRAP);
 		
 		// LAYOUT DEBUG
 		//vehiclesConfiguration.getStyle().set("background-color", "yellow").set("border-style", "solid");

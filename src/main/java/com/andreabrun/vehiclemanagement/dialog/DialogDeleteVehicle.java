@@ -10,7 +10,7 @@ import com.vaadin.flow.server.VaadinSession;
 public class DialogDeleteVehicle extends Dialog {
 	
 	private static final long serialVersionUID = 1L;
-	public final String title = "Delete";
+	public final String title = "Delete vehicle";
 	
 	private VehicleSessionBean vsbean;
 	
@@ -26,7 +26,7 @@ public class DialogDeleteVehicle extends Dialog {
 		else 
 			setHeaderTitle("Errore! Selezionare un veicolo");
 		
-		Button buttonConfirm = new Button("Delete");
+		Button buttonConfirm = new Button("Confirm");
 		Button buttonCancel = new Button("Cancel", e -> this.close());
 		
 		buttonConfirm.addClickListener(this::delete);

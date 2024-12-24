@@ -12,11 +12,13 @@ public class UploadFormView extends VerticalLayout {
     private static final long serialVersionUID = 1L;
     
     public static final String TYPE_IMAGE = "image";
+    public static final String TYPE_DOCUMENT = "document";
 
     private final int num;
     private final String type;
     private final int maxFileSize = 2097152; // 20 MB
     
+    Upload upload;
     MemoryBuffer buffer;
     String filename;
     
@@ -27,12 +29,10 @@ public class UploadFormView extends VerticalLayout {
 		buffer = new MemoryBuffer();
 		this.filename = null;
 		
-        Upload upload = new Upload(buffer);
+        upload = new Upload(buffer);
         upload.setMaxFiles(this.num); // Limit to one file at a time
         upload.setDropAllowed(true); 
-        if(this.type.equals(TYPE_IMAGE)) {
-        	upload.setAcceptedFileTypes("image/*");
-        }
+        setAcceptedFileTypes();
         upload.setMaxFileSize(this.maxFileSize);
         
         upload.addSucceededListener(e -> {
@@ -56,6 +56,15 @@ public class UploadFormView extends VerticalLayout {
 
         add(upload, clearButton);
     }
+	
+	private void setAcceptedFileTypes() {
+		if(this.type.equals(TYPE_IMAGE)) {
+        	upload.setAcceptedFileTypes("image/*");
+        } 
+        else if(this.type.equals(TYPE_DOCUMENT)) {
+        	upload.setAcceptedFileTypes(".pdf");
+        }
+	}
 	
 	public MemoryBuffer getBuffer() {
 		return buffer;

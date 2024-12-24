@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <vehicleContainer>
+    <coverImageName>asset3.jpg</coverImageName>
+    <documentTypes>
+        <entry>
+            <key>Crocchette</key>
+            <value>
+                <id>10</id>
+                <key>Crocchette</key>
+                <stringMileageInterval>1</stringMileageInterval>
+                <stringTimeInterval>0|-|0|-|1</stringTimeInterval>
+            </value>
+        </entry>
+        <entry>
+            <key>Pranzetti</key>
+            <value>
+                <id>27</id>
+                <key>Pranzetti</key>
+                <stringMileageInterval>0</stringMileageInterval>
+                <stringTimeInterval>0|-|0|-|7</stringTimeInterval>
+            </value>
+        </entry>
+    </documentTypes>
     <id>2</id>
     <vehicle>
-        <brand>Honda</brand>
-        <displacement>1339</displacement>
-        <id>1</id>
-        <model>Jazz</model>
-        <name>Hondina</name>
-        <numberPlate>DB88844</numberPlate>
-        <power>99</power>
-        <powerSource>Benzina</powerSource>
-        <type>Utilitaria</type>
+        <brand>Gatto</brand>
+        <displacement></displacement>
+        <id>5</id>
+        <model>Tappo</model>
+        <name>Gioia</name>
+        <numberPlate></numberPlate>
+        <power></power>
+        <powerSource>Crocchette</powerSource>
+        <type>Felino</type>
         <vin></vin>
     </vehicle>
-    <coverImageName>hondina.png</coverImageName>
 </vehicleContainer>

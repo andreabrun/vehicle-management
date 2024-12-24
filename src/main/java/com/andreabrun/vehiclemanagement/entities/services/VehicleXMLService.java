@@ -3,7 +3,7 @@ package com.andreabrun.vehiclemanagement.entities.services;
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
-import com.andreabrun.vehiclemanagement.entities.VehicleDuty;
+import com.andreabrun.vehiclemanagement.entities.VehicleDocumentType;
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 
 import javax.xml.bind.JAXBContext;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class VehicleXMLService {
 	
-	public static final  List<Class<?>> serializableClasses = Arrays.asList(Vehicle.class, VehicleContainer.class, VehicleDocument.class, VehicleDuty.class, 
+	public static final  List<Class<?>> serializableClasses = Arrays.asList(Vehicle.class, VehicleContainer.class, VehicleDocument.class, VehicleDocumentType.class, 
 																				PersistenceHelper.class);
 
     public static void marshalToXML(Object serializableObj, Class<?> clazz, String filename) throws JAXBException {

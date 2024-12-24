@@ -27,13 +27,15 @@ public class VehicleDocumentSummaryView extends VerticalLayout {
 			add(new H4(f));
 		}
 		
-		String date = vd.getDate().toString();
+		String date = vd.getStringDate();
 		add(new H4(date));
 		
-		String mileage = vd.getMileage(); 
+		String mileage = vd.getMileage().toString(); 
 		add(new H4(mileage));
 		
 		setWidth(width, Unit.PIXELS);
+		
+		getStyle().set("border-style", "solid");
         
 	}
 }

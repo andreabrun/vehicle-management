@@ -1,7 +1,10 @@
 package com.andreabrun.vehiclemanagement.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
@@ -9,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.andreabrun.vehiclemanagement.entities.services.Persistable;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleXMLService;
+import com.andreabrun.vehiclemanagement.utils.Comparators;
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 
@@ -28,9 +32,7 @@ public class VehicleContainer implements Persistable {
 	
 	List<String> configuredDuties;
 	
-	List<VehicleDuty> duties;
-	
-	String currentMileage;
+	Map<String, VehicleDocumentType> documentTypes;
 	
 	public VehicleContainer() {
 		this(null);
@@ -40,7 +42,7 @@ public class VehicleContainer implements Persistable {
 		id = PersistenceHelper.getNextID();
 		master = v;
 		configuredDuties = new ArrayList<String>();
-		duties = new ArrayList<VehicleDuty>();
+		documentTypes = new HashMap<String, VehicleDocumentType>();
 	}
 	
 	// XML GETTERS AND SETTERS
@@ -72,15 +74,6 @@ public class VehicleContainer implements Persistable {
     }
 	
 	@XmlElement
-    public String getCurrentMileage() {
-        return currentMileage;
-    }
-	
-	public void setCurrentMileage(String currentMileage) {
-        this.currentMileage = currentMileage;
-    }
-	
-	@XmlElement
     public List<String> getConfiguredDuties() {
         return configuredDuties;
     }
@@ -90,12 +83,12 @@ public class VehicleContainer implements Persistable {
     }
 	
 	@XmlElement
-    public List<VehicleDuty> getDuties() {
-        return duties;
+    public Map<String, VehicleDocumentType> getDocumentTypes() {
+		return documentTypes;
     }
 
-    public void setDuties(List<VehicleDuty> duties) {
-        this.duties = duties;
+    public void setDocumentTypes(Map<String, VehicleDocumentType> docTypes) {
+    	this.documentTypes = docTypes;
     }
     // END XML GETTERS AND SETTERS
     
@@ -106,14 +99,14 @@ public class VehicleContainer implements Persistable {
     public String getCoverImagePath() {
         return getAssetsPath() + "/" + getCoverImageName();
     }
+    
+    public void addDocumentType(VehicleDocumentType vdt) {
+    	if(vdt != null)
+    		this.documentTypes.put(vdt.getKey(), vdt);
+    }
 	
-	public VehicleDuty getDuty(String key) {
-		
-		for(VehicleDuty vd : duties) {
-			if(key.equals(vd.key))
-				return vd;
-		}
-		return null;
+	public VehicleDocumentType getDocumentType(String key) {
+		return documentTypes.get(key);
 	}
 	
 	@Override
@@ -145,11 +138,43 @@ public class VehicleContainer implements Persistable {
 		PersistenceUtils.delete(getDocumentsPath());
 	}
 	
-	
 	public void delete() {
 		deleteAssetsFolder();
 		deleteDocumentsFolder();
 		PersistenceUtils.delete(getFileName());
+	}
+	
+	public List<VehicleDocument> getAllDocuments() {
+		
+		List<VehicleDocument> documents = new ArrayList<VehicleDocument>();
+		
+		List<String> docFiles = PersistenceUtils.getFilesInFolderWithKey(getDocumentsPath(), VehicleDocument.PERSISTENCE_KEY);
+		for(String doc : docFiles) {
+			VehicleDocument d = null;
+			try {
+				d = (VehicleDocument) VehicleXMLService.unmarshalFromXML(getDocumentsPath() + "/" + doc, VehicleDocument.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(d != null) {
+				documents.add(d);
+			}
+		}
+		
+		return documents;
+	}
+	
+	public List<VehicleDocument> getAllDocumentsOrderedByDate() {
+		List<VehicleDocument> documents = getAllDocuments();
+		Collections.sort(documents, Comparators.VEHICLE_DOCUMENT_DATE.reversed());
+		return documents;
+	}
+	
+	public VehicleDocument getLatestVehicleDocument() {
+		List<VehicleDocument> documents = getAllDocumentsOrderedByDate();
+		if(documents.isEmpty())
+			return null;
+		return documents.get(0);
 	}
 	
 	public void persist() {
@@ -181,6 +206,15 @@ public class VehicleContainer implements Persistable {
 			}
 		}
 		
+		return res;
+	}
+	
+	// Functions for COMBOBOX List Values
+	public List<String> getVehicleDocumentTypeKeys() {
+		List<String> res = new ArrayList<String>();
+		for(String s : getDocumentTypes().keySet()) {
+			res.add(s);
+		}
 		return res;
 	}
 }
