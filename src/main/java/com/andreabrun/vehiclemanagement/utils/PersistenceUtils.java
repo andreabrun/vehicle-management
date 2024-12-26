@@ -6,9 +6,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
+import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 
 public class PersistenceUtils {
 	
@@ -108,9 +111,46 @@ public class PersistenceUtils {
 		return oldf.renameTo(newf);
 	}
 	
+	private static String getExtension(String filename) {
+    	int indexOfPoint = filename.lastIndexOf('.');
+    	String extension = "";
+    	
+    	if(indexOfPoint > 0)
+    		extension = filename.substring(indexOfPoint);
+    	return extension;
+	}
 
-	public static String saveUploadedDocuments(MemoryBuffer buffer, VehicleContainer vc) {
-		return null;
+	public static List<String> saveUploadedDocuments(MultiFileMemoryBuffer buffer, VehicleDocument vd) {
+		List<String> res = new ArrayList<String>();
+		
+		Set<String> filenames = buffer.getFiles();
+		
+		if(filenames == null) return res;
+		
+		for(String f : filenames) {
+			String extension = getExtension(f);
+			String fileName = PersistenceUtils.DOCUMENTS_KEY + PersistenceHelper.getNextID() + extension;
+			// Create the target file
+	        File targetFile = new File(vd.getDocumentsPath(), fileName);
+
+	        try (
+	        	InputStream inputStream = buffer.getInputStream(f);
+	        	FileOutputStream outputStream = new FileOutputStream(targetFile)) {
+
+	            byte[] bufferBytes = new byte[1024];
+	            int bytesRead;
+
+	            while ((bytesRead = inputStream.read(bufferBytes)) != -1) {
+	                outputStream.write(bufferBytes, 0, bytesRead);
+	            }
+	            
+	            res.add(targetFile.getName());
+	        } catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return res;
 	}
 	
 	/**
@@ -124,11 +164,7 @@ public class PersistenceUtils {
 		String res = null;
 		
 		String inputName = buffer.getFileName();
-    	int indexOfPoint = inputName.lastIndexOf('.');
-    	String extension = "";
-    	
-    	if(indexOfPoint > 0)
-    		extension = inputName.substring(indexOfPoint);
+    	String extension = getExtension(inputName);
     	
     	String fileName = PersistenceUtils.ASSETS_KEY + PersistenceHelper.getNextID() + extension;
     	

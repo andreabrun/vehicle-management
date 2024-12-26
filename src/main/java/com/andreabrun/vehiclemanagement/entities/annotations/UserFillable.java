@@ -15,6 +15,7 @@ public @interface UserFillable {
 	public static final String TEXT_LIST = "text-list";
 	public static final String PERIOD = "period";
 	public static final String COMBOBOX = "combobox";
+	public static final String TEXTLIST = "textlist";
 	
 	String label() default "";
 	int order() default 0;

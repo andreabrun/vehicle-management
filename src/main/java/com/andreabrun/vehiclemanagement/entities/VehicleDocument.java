@@ -44,7 +44,7 @@ public class VehicleDocument implements Persistable {
 	@UserFillable(label = "Costo", order = 4, type = UserFillable.DOUBLE)
 	Float charge;
 	
-	//@UserFillable(label = "Voci", order = 5, UserFillable.TEXT_LIST)
+	@UserFillable(label = "Informazioni", order = 5, type = UserFillable.TEXTLIST)
 	List<String> items;
 	
 	public VehicleDocument() {
@@ -52,7 +52,7 @@ public class VehicleDocument implements Persistable {
 	}
 	
 	public VehicleDocument(VehicleContainer vc) {
-		this(vc, UNCATEGORIZED_DOCUMENT_KEY, LocalDate.now(), null, null, null);
+		this(vc, UNCATEGORIZED_DOCUMENT_KEY, LocalDate.now(), vc.getCurrentMileage(), null, null);
 	}
 	
 	public VehicleDocument(VehicleContainer vc, String key) {
@@ -113,6 +113,11 @@ public class VehicleDocument implements Persistable {
 		return charge;
 	}
 	
+	@XmlElement
+	public List<String> getItems() {
+		return items;
+	}
+	
 	@XmlTransient
 	public LocalDate getDate() {
 		return date;
@@ -152,6 +157,10 @@ public class VehicleDocument implements Persistable {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setItems(List<String> items) {
+		this.items = items;
 	}
 	
 	private void createFolder() {

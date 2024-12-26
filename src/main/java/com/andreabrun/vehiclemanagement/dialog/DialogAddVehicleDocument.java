@@ -1,12 +1,19 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
+import java.util.List;
+import java.util.Set;
+
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.form.MultiUploadFormView;
+import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleDocumentFormView;
+import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 
@@ -21,6 +28,7 @@ public class DialogAddVehicleDocument extends Dialog {
 	private VehicleDocument vd = null;
 	
 	private VehicleDocumentFormView form;
+	private MultiUploadFormView uploadDocumentsForm;
 	
 	public DialogAddVehicleDocument(VehicleContainer vc) {
 		
@@ -31,6 +39,10 @@ public class DialogAddVehicleDocument extends Dialog {
 			setHeaderTitle(title);
 			form = new VehicleDocumentFormView(vd, vc);
 			add(form);
+			
+			NativeLabel addDocumentsTitle = new NativeLabel("Upload documents");
+			uploadDocumentsForm = new MultiUploadFormView(10, UploadFormView.TYPE_DOCUMENT);
+			add(addDocumentsTitle, uploadDocumentsForm);
 			
 			Button buttonSave = new Button("Save");
 			Button buttonCancel = new Button("Cancel", e -> {
@@ -56,7 +68,12 @@ public class DialogAddVehicleDocument extends Dialog {
 			vd = form.getVehicleDocument();
 			this.vd.persist();
 			
-			Notification.show("Documento salvato correttamente!");
+			Set<String> filenames = uploadDocumentsForm.getFilenames();
+			if(filenames != null && filenames.size() > 0) {
+				List<String> uploadedDocuments = PersistenceUtils.saveUploadedDocuments(uploadDocumentsForm.getBuffer(), vd);
+			}
+			
+			Notification.show("Documenti salvato correttamente!");
 			this.vd = null;
 			this.close();
 		} else {

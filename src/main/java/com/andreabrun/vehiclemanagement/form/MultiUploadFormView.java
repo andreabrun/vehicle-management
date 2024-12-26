@@ -1,13 +1,13 @@
 package com.andreabrun.vehiclemanagement.form;
-import java.io.IOException;
+import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 
-public class UploadFormView extends VerticalLayout {
+public class MultiUploadFormView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
     
@@ -15,42 +15,42 @@ public class UploadFormView extends VerticalLayout {
     public static final String TYPE_DOCUMENT = "document";
     
     public static final int WIDTH = 300;
-    
+
+    private final int num;
     private final String type;
     private final int maxFileSize = 2097152; // 20 MB
     
     Upload upload;
-    MemoryBuffer buffer;
-    String filename;
+    MultiFileMemoryBuffer buffer;
+    Set<String> filenames;
     
-	public UploadFormView(String type) {
-
+	public MultiUploadFormView(int num, String type) {
+		
+		this.num = num;
 		this.type = type;
-		buffer = new MemoryBuffer();
-		this.filename = null;
+		buffer = new MultiFileMemoryBuffer();
+		this.filenames = null;
 		
         upload = new Upload(buffer);
+        upload.setMaxFiles(this.num); // Limit to one file at a time
         upload.setDropAllowed(true); 
         setAcceptedFileTypes();
         upload.setMaxFileSize(this.maxFileSize);
         
         upload.addSucceededListener(e -> {
-        	
-            this.filename = e.getFileName();
-            long fileSize = 0;
-			try {
-				fileSize = buffer.getInputStream().available();
-			} catch (IOException exp) {
-				exp.printStackTrace();
-			}
 
-            Notification.show("File uploaded: " + filename + " (" + fileSize + " bytes)");
+			filenames = buffer.getFiles();
+
+			StringBuffer sb = new StringBuffer("File uploaded: ");
+			for(String filename : filenames) sb.append(filename + "\n");
+            Notification.show(sb.toString());
             
         });
 
         Button clearButton = new Button("Clear", event -> {
+        	buffer.getFiles().clear();
         	upload.clearFileList();
-        	filename = null;
+        	filenames = null;
         });
 
         add(upload, clearButton);
@@ -66,11 +66,11 @@ public class UploadFormView extends VerticalLayout {
         }
 	}
 	
-	public MemoryBuffer getBuffer() {
+	public MultiFileMemoryBuffer getBuffer() {
 		return buffer;
 	}
 	
-	public String getFilename() {
-		return filename;
+	public Set<String> getFilenames() {
+		return filenames;
 	}
 }

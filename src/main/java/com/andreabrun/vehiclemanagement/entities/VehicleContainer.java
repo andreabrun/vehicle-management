@@ -177,6 +177,11 @@ public class VehicleContainer implements Persistable {
 		return documents.get(0);
 	}
 	
+	public Integer getCurrentMileage() {
+		VehicleDocument latestVehicleDocument = getLatestVehicleDocument();
+		return latestVehicleDocument != null ? latestVehicleDocument.getMileage() : 0;
+	}
+	
 	public void persist() {
 		try {
 			

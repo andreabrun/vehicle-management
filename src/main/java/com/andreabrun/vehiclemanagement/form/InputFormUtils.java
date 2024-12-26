@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.annotations.UserFillable;
+import com.andreabrun.vehiclemanagement.form.fields.ListStringField;
 import com.andreabrun.vehiclemanagement.form.fields.PeriodField;
 import com.andreabrun.vehiclemanagement.utils.Comparators;
 import com.vaadin.flow.component.Component;
@@ -53,7 +54,7 @@ public class InputFormUtils {
         	
         	String label = key.label();
         	if(StringUtils.isEmpty(label))
-        		label =  fields.get(key);
+        		label = fields.get(key);
         	
         	if(key.type().equals(UserFillable.DATE)) {
         		DatePicker tf = new DatePicker(label);
@@ -80,6 +81,12 @@ public class InputFormUtils {
                 periodField.setLabel("Enter Period");
                 binder.forField(periodField).bind(fields.get(key));
                 res.add(periodField);
+        	}
+        	else if(key.type().equals(UserFillable.TEXTLIST)) {
+        		ListStringField listStringField = new ListStringField();
+        		listStringField.setLabel("List of values");
+                binder.forField(listStringField).bind(fields.get(key));
+                res.add(listStringField);
         	}
         	else if(key.type().equals(UserFillable.COMBOBOX)) {
         		ComboBox<String> cb = new ComboBox<>();

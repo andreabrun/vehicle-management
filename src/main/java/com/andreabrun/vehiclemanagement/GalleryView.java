@@ -60,7 +60,7 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		
 		if(vc != null) {
 			H4 uploadImageH4 = new H4("Upload image");
-			uploadImageForm = new UploadFormView(1, UploadFormView.TYPE_IMAGE);
+			uploadImageForm = new UploadFormView(UploadFormView.TYPE_IMAGE);
 			Button buttonUpload = new Button("Upload");
 			buttonUpload.addClickListener(this::uploadImage);
 			add(uploadImageH4, uploadImageForm, buttonUpload);

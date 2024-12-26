@@ -9,7 +9,7 @@ import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 
@@ -34,9 +34,9 @@ public class DialogAddVehicle extends Dialog {
 		form = new VehicleFormView(v, vc);
 		add(form);
 		
-		H4 coverImageH4 = new H4("Upload cover image");
-		coverImageForm = new UploadFormView(1, UploadFormView.TYPE_IMAGE);
-		add(coverImageH4, coverImageForm);
+		NativeLabel coverImageTitle = new NativeLabel("Upload cover image");
+		coverImageForm = new UploadFormView(UploadFormView.TYPE_IMAGE);
+		add(coverImageTitle, coverImageForm);
 		
 		Button buttonSave = new Button("Save");
 		Button buttonCancel = new Button("Cancel", e -> this.close());

@@ -13,7 +13,7 @@ import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 @XmlRootElement
 public class VehicleDocumentType {
 	
-	public static final String UNCATEGORIZED_DOCUMENT_KEY = "null";
+	public static final String UNCATEGORIZED_DOCUMENT_KEY = "Generic";
 	
 	private Long id;
 	
