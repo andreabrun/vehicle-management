@@ -3,7 +3,9 @@ package com.andreabrun.vehiclemanagement.view;
 import java.util.List;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
+import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,7 +26,8 @@ public class VehicleDocumentSummaryView extends VerticalLayout {
 		
 		List<String> files = vd.getDocumentFiles();
 		for(String f : files) {
-			add(new H4(f));
+			Anchor pdfLink = ComponentsUtils.getPDFAnchorFromPath(vd.getDocumentsPath() + "/" + f);
+	        add(pdfLink);
 		}
 		
 		String date = vd.getStringDate();

@@ -18,7 +18,7 @@ public class MultiUploadFormView extends VerticalLayout {
 
     private final int num;
     private final String type;
-    private final int maxFileSize = 2097152; // 20 MB
+    private final int maxFileSize = 41943040; // 40 MB
     
     Upload upload;
     MultiFileMemoryBuffer buffer;
