@@ -4,6 +4,7 @@ import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocumentType;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
 import com.andreabrun.vehiclemanagement.form.VehicleDocumentTypeFormView;
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -43,7 +44,7 @@ public class DialogAddVehicleDocumentType extends Dialog {
 			getFooter().add(buttonCancel);
 			getFooter().add(buttonSave);
 		} else {
-			setHeaderTitle("Errore! Selezionare un veicolo!");
+			setHeaderTitle(MessagesUtils.ERROR_VEHICLE_NOT_SELECTED_TITLE);
 			Button buttonCancel = new Button("Cancel", e -> this.close());
 			getFooter().add(buttonCancel);
 		}

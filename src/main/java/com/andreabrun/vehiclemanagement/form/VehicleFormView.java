@@ -4,20 +4,22 @@ import java.util.List;
 
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
+import com.andreabrun.vehiclemanagement.utils.StyleUtils;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.dom.Style;
 
 public class VehicleFormView extends VerticalLayout implements InputForm<Vehicle> {
 
     private static final long serialVersionUID = 1L;
-    
-    public static final int WIDTH = 300;
 
     private BeanValidationBinder<Vehicle> binder;
     
     private Vehicle vehicle;
     private VehicleContainer vc;
+    
+    private List<Component> inputComponents;
     
     public VehicleFormView() {
 		this(new Vehicle(), null);
@@ -30,12 +32,11 @@ public class VehicleFormView extends VerticalLayout implements InputForm<Vehicle
 		
         binder = new BeanValidationBinder<>(Vehicle.class);
 
-        List<Component> inputComponents = InputFormUtils.createInputComponents(Vehicle.class, binder, vc);
+        inputComponents = InputFormUtils.createInputComponents(Vehicle.class, binder, vc);
         
         binder.readBean(this.vehicle);
         
         for(Component c : inputComponents) {
-        	c.getStyle().set("width", WIDTH + "px");
         	add(c);
         }
 	}
@@ -61,5 +62,11 @@ public class VehicleFormView extends VerticalLayout implements InputForm<Vehicle
             }
         }
 		return false;
+	}
+	
+	public void applyStyleToInputComponents(Style style) {
+		for(Component c : inputComponents) {
+			StyleUtils.applyStyle(c, style);
+        }
 	}
 }

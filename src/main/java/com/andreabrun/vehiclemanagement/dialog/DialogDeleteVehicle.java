@@ -2,6 +2,7 @@ package com.andreabrun.vehiclemanagement.dialog;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -24,7 +25,7 @@ public class DialogDeleteVehicle extends Dialog {
 		if(vc != null)
 			setHeaderTitle(title + " " + vc.getVehicle().getName());
 		else 
-			setHeaderTitle("Errore! Selezionare un veicolo");
+			setHeaderTitle(MessagesUtils.ERROR_VEHICLE_NOT_SELECTED_TITLE);
 		
 		Button buttonConfirm = new Button("Confirm");
 		Button buttonCancel = new Button("Cancel", e -> this.close());

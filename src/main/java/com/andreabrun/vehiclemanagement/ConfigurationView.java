@@ -6,7 +6,9 @@ import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicle;
 import com.andreabrun.vehiclemanagement.dialog.DialogEditVehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.form.VehicleFormView;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
+import com.andreabrun.vehiclemanagement.utils.StyleUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -68,6 +70,12 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		
 		initVehiclesConfiguration();
 		add(vehiclesConfiguration);
+		
+		if(this.vc != null) {
+			VehicleFormView form = new VehicleFormView(vc.getVehicle(), vc);
+			form.applyStyleToInputComponents(StyleUtils.INPUT_DISABLED);
+			add(form);
+		}
 	}
 	
 	

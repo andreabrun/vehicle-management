@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.form.ImagePickerFormView;
 import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
@@ -68,8 +69,12 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		
 		initVehicleGallery();
 		add(vehicleGallery);
+		
+		ImagePickerFormView imgp = new ImagePickerFormView(vc);
+		this.add(imgp);
+		
 	}
-	
+
 	private void initVehicleGallery() {
 		
 		vehicleGallery = new FlexLayout();

@@ -119,6 +119,15 @@ public class PersistenceUtils {
     		extension = filename.substring(indexOfPoint);
     	return extension;
 	}
+	
+	public static String getFilename(String filePath) {
+    	int indexOfPoint = filePath.lastIndexOf('/');
+    	String extension = "";
+    	
+    	if(indexOfPoint > 0)
+    		extension = filePath.substring(indexOfPoint);
+    	return extension;
+	}
 
 	public static List<String> saveUploadedDocuments(MultiFileMemoryBuffer buffer, VehicleDocument vd) {
 		List<String> res = new ArrayList<String>();

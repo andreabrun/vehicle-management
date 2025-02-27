@@ -10,13 +10,15 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.util.StringUtils;
+
 import com.andreabrun.vehiclemanagement.entities.services.Persistable;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleXMLService;
 import com.andreabrun.vehiclemanagement.utils.Comparators;
+import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
-
-import io.micrometer.common.util.StringUtils;
+import com.vaadin.flow.component.html.Image;
 
 @XmlRootElement
 public class VehicleContainer implements Persistable {
@@ -33,6 +35,8 @@ public class VehicleContainer implements Persistable {
 	List<String> configuredDuties;
 	
 	Map<String, VehicleDocumentType> documentTypes;
+	
+	Map<String, VehicleInformationType> informationTypes;
 	
 	public VehicleContainer() {
 		this(null);
@@ -90,10 +94,19 @@ public class VehicleContainer implements Persistable {
     public void setDocumentTypes(Map<String, VehicleDocumentType> docTypes) {
     	this.documentTypes = docTypes;
     }
+    
+    @XmlElement
+    public Map<String, VehicleInformationType> getInformationTypes() {
+		return informationTypes;
+    }
+
+    public void setInformationTypes(Map<String, VehicleInformationType> infoTypes) {
+    	this.informationTypes = infoTypes;
+    }
     // END XML GETTERS AND SETTERS
     
     public boolean isCoverImagePresent() {
-    	return !StringUtils.isEmpty(getCoverImageName());
+    	return StringUtils.hasLength(getCoverImageName());
     }
     
     public String getCoverImagePath() {
@@ -221,5 +234,29 @@ public class VehicleContainer implements Persistable {
 			res.add(s);
 		}
 		return res;
+	}
+	
+	// Functions for COMBOBOX List Values
+	public List<String> getVehicleInformationTypeKeys() {
+		List<String> res = new ArrayList<String>();
+		for(String s : getInformationTypes().keySet()) {
+			res.add(s);
+		}
+		return res;
+	}
+	
+	// Functions for Gallery and Assets
+	public List<Image> getAllImages() {
+		List<String> filesInFolder = getAllAssets();
+		List<Image> res = new ArrayList<Image>();
+		for(String imgPath : filesInFolder) {
+			Image img = ComponentsUtils.getImageFromPath(imgPath);
+			res.add(img);
+		}
+		return res;
+	}
+	
+	public List<String> getAllAssets() {
+		return PersistenceUtils.getFilesInFolder(getAssetsPath(), true);
 	}
 }
