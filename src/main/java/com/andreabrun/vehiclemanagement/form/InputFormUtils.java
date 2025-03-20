@@ -53,7 +53,7 @@ public class InputFormUtils {
         for(UserFillable key : keys) {
         	
         	String label = key.label();
-        	if(StringUtils.isEmpty(label))
+        	if(!StringUtils.hasLength(label))
         		label = fields.get(key);
         	
         	if(key.type().equals(UserFillable.DATE)) {

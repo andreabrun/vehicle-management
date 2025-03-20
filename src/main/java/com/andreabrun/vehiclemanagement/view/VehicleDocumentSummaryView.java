@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
+import com.andreabrun.vehiclemanagement.utils.StyleUtils;
 import com.andreabrun.vehiclemanagement.utils.ViewUtils;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
@@ -33,17 +34,18 @@ public class VehicleDocumentSummaryView extends VerticalLayout {
 		}
 		
 		String date = vd.getStringDate();
-		add(new H4(date));
+		Component simpleDateOutput = ViewUtils.createSimpleOutputComponents("Date", date);
+		add(simpleDateOutput);
 		
 		String mileage = vd.getMileage().toString(); 
-		add(new H4(mileage));
-		
-		setWidth(width, Unit.PIXELS);
-		
-		getStyle().set("border-style", "solid");
+		Component simpleMileageOutput = ViewUtils.createSimpleOutputComponents("km", mileage);
+		add(simpleMileageOutput);
 		
 		List<Component> outputComponents = ViewUtils.createOutputComponents(VehicleDocument.class, vd);
 		add(outputComponents);
+		
+		StyleUtils.applyStyle(this, StyleUtils.VEHICLE_DOCUMENT_VIEW_STYLE);
+		setWidth(width, Unit.PIXELS);
         
 	}
 }

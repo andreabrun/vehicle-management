@@ -40,7 +40,7 @@ public class MainView extends AppLayout implements RouterLayout {
         
         sideNav.addItem(new SideNavItem("Home", HomeView.class));
         
-        sideNav.addItem(new SideNavItem("Dashboard", DashboardView.class));
+        //sideNav.addItem(new SideNavItem("Dashboard", DashboardView.class));
         
         sideNav.addItem(new SideNavItem("Configuration", ConfigurationView.class));
         
@@ -48,7 +48,7 @@ public class MainView extends AppLayout implements RouterLayout {
         
         sideNav.addItem(new SideNavItem("Gallery", GalleryView.class));
         
-        sideNav.addItem(new SideNavItem("About", AboutView.class));
+        //sideNav.addItem(new SideNavItem("About", AboutView.class));
         
         Scroller scroller = new Scroller(sideNav);
        

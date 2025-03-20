@@ -6,6 +6,7 @@ import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
 import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleFormView;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
+import com.andreabrun.vehiclemanagement.utils.StyleUtils;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -32,6 +33,8 @@ public class DialogAddVehicle extends Dialog {
 		
 		setHeaderTitle(title);
 		form = new VehicleFormView(v, vc);
+		StyleUtils.applyStyle(form, StyleUtils.VEHICLE_FORM_VIEW_STYLE);
+		form.applyStyleToInputComponents(StyleUtils.VEHICLE_FORM_VIEW_INPUT_STYLE);
 		add(form);
 		
 		NativeLabel coverImageTitle = new NativeLabel("Upload cover image");

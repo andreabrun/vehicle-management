@@ -1,11 +1,10 @@
 package com.andreabrun.vehiclemanagement;
 
-import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicle;
 import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicleDocumentType;
 import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicle;
-import com.andreabrun.vehiclemanagement.dialog.DialogEditVehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.form.ImagePickerFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleFormView;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
@@ -24,17 +23,16 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	private VehicleContainer vc;
 	
 	FlexLayout vehiclesConfiguration;
-	Button buttonOpenAddVehicle;
 	Button buttonOpenDeleteVehicle;
-	Button buttonOpenEditVehicle;
-	
+	Button buttonEditVehicle;
 	Button buttonOpenAddVehicleDocumentType;
 	
-	DialogAddVehicle dialogAddVehicle;
 	DialogDeleteVehicle dialogDeleteVehicle;
-	DialogEditVehicle dialogEditVehicle;
-	
 	DialogAddVehicleDocumentType dialogAddVehicleDocumentType;
+	
+	FlexLayout vehiclesConfigurationForms;
+	VehicleFormView vehicleFormView;
+	ImagePickerFormView imagePickerFormView;
 	
 	public ConfigurationView() {
 		init();
@@ -64,18 +62,14 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	
 	private void initComponents() {
 		initDialogs();
-		add(dialogAddVehicle);
 		add(dialogDeleteVehicle);
-		add(dialogEditVehicle);
 		
 		initVehiclesConfiguration();
 		add(vehiclesConfiguration);
 		
-		if(this.vc != null) {
-			VehicleFormView form = new VehicleFormView(vc.getVehicle(), vc);
-			form.applyStyleToInputComponents(StyleUtils.INPUT_DISABLED);
-			add(form);
-		}
+		initVehiclesConfigurationForms();
+		add(vehiclesConfigurationForms);
+		
 	}
 	
 	
@@ -83,29 +77,15 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		
 		vehiclesConfiguration = new FlexLayout();
 
-		// ADD NEW VEHICLE
-		buttonOpenAddVehicle = new Button("Aggiungi veicolo");
-		buttonOpenAddVehicle.addClickListener( e -> {
-			dialogAddVehicle.open();
-		});
-		buttonOpenAddVehicle.getStyle().set("margin", "5px");
-		vehiclesConfiguration.add(buttonOpenAddVehicle);
 		
 		// DELETE VEHICLE
 		buttonOpenDeleteVehicle = new Button("Elimina veicolo");
 		buttonOpenDeleteVehicle.addClickListener( e -> {
 			dialogDeleteVehicle.open();
 		});
-		buttonOpenAddVehicle.getStyle().set("margin", "5px");
+		buttonOpenDeleteVehicle.getStyle().set("margin", "5px");
 		vehiclesConfiguration.add(buttonOpenDeleteVehicle);
 		
-		// EDIT VEHICLE
-		buttonOpenEditVehicle = new Button("Modifica veicolo");
-		buttonOpenEditVehicle.addClickListener( e -> {
-			dialogEditVehicle.open();
-		});
-		buttonOpenEditVehicle.getStyle().set("margin", "5px");
-		vehiclesConfiguration.add(buttonOpenEditVehicle);
 		
 		// EDIT VEHICLE
 		buttonOpenAddVehicleDocumentType = new Button("Aggiungi nuovo tipo di documento");
@@ -118,16 +98,44 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		vehiclesConfiguration.setWidthFull();
 		vehiclesConfiguration.setFlexWrap(FlexLayout.FlexWrap.WRAP);
 		
+		buttonEditVehicle = new Button("Modifica");
+		buttonEditVehicle.addClickListener( e -> {
+			if(vehicleFormView != null) {
+				if(vehicleFormView.isEnabled())
+					vehicleFormView.executeEnable(false);
+				else vehicleFormView.executeEnable(true);
+			}
+		});
+		vehiclesConfiguration.add(buttonEditVehicle);
+		
 		// LAYOUT DEBUG
 		//vehiclesConfiguration.getStyle().set("background-color", "yellow").set("border-style", "solid");
 		
 	}
 	
-	private void initDialogs() {
-		dialogAddVehicle = new DialogAddVehicle();
-		dialogDeleteVehicle = new DialogDeleteVehicle(vc);
-		dialogEditVehicle = new DialogEditVehicle(vc);
+	private void initVehiclesConfigurationForms() {
 		
+		vehiclesConfigurationForms = new FlexLayout();
+		vehiclesConfigurationForms.setWidthFull();
+		vehiclesConfigurationForms.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+		
+		if(this.vc != null) {
+			vehicleFormView = new VehicleFormView(vc.getVehicle(), vc);
+			
+			StyleUtils.applyStyle(vehicleFormView, StyleUtils.VEHICLE_FORM_VIEW_STYLE);
+			vehicleFormView.applyStyleToInputComponents(StyleUtils.VEHICLE_FORM_VIEW_INPUT_STYLE);
+			
+			vehiclesConfigurationForms.add(vehicleFormView);
+			vehicleFormView.executeEnable(false);
+			
+			imagePickerFormView = new ImagePickerFormView(vc);
+			vehiclesConfigurationForms.add(imagePickerFormView);
+		}
+		
+	}	
+	
+	private void initDialogs() {
+		dialogDeleteVehicle = new DialogDeleteVehicle(vc);
 		dialogAddVehicleDocumentType = new DialogAddVehicleDocumentType(vc);
 	}
 }

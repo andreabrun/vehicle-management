@@ -12,7 +12,6 @@ import com.andreabrun.vehiclemanagement.utils.ViewUtils;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -39,28 +38,32 @@ public class VehicleSummaryView extends VerticalLayout {
 		} else {
 			coverImage = ComponentsUtils.getImageFromPath(PersistenceUtils.ASSETS_PATH + DEFAULT_COVERIMAGE_NAME);
 		}
+		
 		coverImage.setWidthFull();
+		coverImage.setHeightFull();
 		coverImageDiv.add(coverImage);
-		coverImageDiv.getStyle().set("overflow", "hidden").set("align-items", "center").set("vertical-align", "center");
-		coverImageDiv.getStyle().set("border-radius", "15px");
+		
+		StyleUtils.applyStyle(coverImageDiv, StyleUtils.VEHICLE_SUMMARY_VIEW_COVER_IMAGE_DIV_STYLE);
 		coverImageDiv.setWidth(WIDTH - 20 + "px");
+		coverImageDiv.setHeight(WIDTH * 0.75 + "px");
 		
 		add(coverImageDiv);
-		
-		String mileageContent = "km: ";
 		
 		VehicleDocument latestDocument = vc.getLatestVehicleDocument();
 		if(latestDocument != null) {
 			String mileage = latestDocument.getMileage().toString();
-			mileageContent += mileage;
-			add(new H4(mileageContent));
+			
+			Component simpleMileageComponents = ViewUtils.createSimpleOutputComponents("km", mileage);
+			add(simpleMileageComponents);
 		}
+		
+		
 		
 		List<Component> outputComponents = ViewUtils.createOutputComponents(Vehicle.class, vehicle);
 		add(outputComponents);
 		
+		StyleUtils.applyStyle(this, StyleUtils.VEHICLE_SUMMARY_VIEW_STYLE);
 		setWidth(WIDTH, Unit.PIXELS);
-        StyleUtils.applyStyle(this, StyleUtils.VEHICLE_SUMMARY_VIEW_STYLE);
         
 	}
 }

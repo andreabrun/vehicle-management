@@ -4,8 +4,13 @@ import java.util.List;
 
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.dom.Style;
@@ -20,6 +25,11 @@ public class VehicleFormView extends VerticalLayout implements InputForm<Vehicle
     private VehicleContainer vc;
     
     private List<Component> inputComponents;
+    private Button buttonSave;
+    private Button buttonClear;
+    private Div buttonsContainer;
+    
+    private boolean enabled = true;
     
     public VehicleFormView() {
 		this(new Vehicle(), null);
@@ -39,6 +49,20 @@ public class VehicleFormView extends VerticalLayout implements InputForm<Vehicle
         for(Component c : inputComponents) {
         	add(c);
         }
+        
+        buttonsContainer = new Div();
+        
+        buttonSave = new Button(MessagesUtils.SAVE);
+		buttonSave.addClickListener(this::executeSave);
+		buttonSave.getElement().removeProperty("disabled");
+		StyleUtils.applyStyle(buttonSave, StyleUtils.FORM_LEFT_BUTTON_STYLE);
+		buttonsContainer.add(buttonSave);
+		
+		buttonClear = new Button(MessagesUtils.CLEAR);
+		buttonClear.addClickListener(this::executeClear);
+		buttonClear.getElement().removeProperty("disabled");
+		StyleUtils.applyStyle(buttonClear, StyleUtils.FORM_RIGHT_BUTTON_STYLE);
+		buttonsContainer.add(buttonClear);
 	}
 	
 	public void update(Vehicle vehicle) {
@@ -54,19 +78,66 @@ public class VehicleFormView extends VerticalLayout implements InputForm<Vehicle
 		if (binder.validate().isOk()) {
             try {
                 binder.writeBean(this.vehicle);
-                //Notification.show("Veicolo creato correttamente!");
                 return true;
             } catch (Exception e) {
-                //Notification.show("Errore! " + e.getMessage());
             	e.printStackTrace();
             }
         }
 		return false;
 	}
 	
+	private void setInputComponentsEnabled(boolean enabled) {
+		for(Component c : inputComponents) {
+			if(!enabled)
+				c.getElement().setProperty("disabled", "true");
+			else 
+				c.getElement().removeProperty("disabled");
+		}
+	}
+	
 	public void applyStyleToInputComponents(Style style) {
 		for(Component c : inputComponents) {
 			StyleUtils.applyStyle(c, style);
         }
+	}
+	
+	public void executeEnable(boolean enabled) {
+		this.setInputComponentsEnabled(enabled);
+		if(enabled) {
+			add(buttonsContainer);
+		} else {
+			remove(buttonsContainer);
+		}
+		this.enabled = enabled;
+	}
+	
+	public void executeSave(ClickEvent<?> e) {
+		boolean res = this.save();
+		if(res) {
+			Notification.show(MessagesUtils.VEHICLE_SAVED_SUCCESS);
+		} else {
+			Notification.show(MessagesUtils.ERROR);
+		}
+	}
+	
+	public void executeClear(ClickEvent<?> e) {
+		this.clear();
+	}
+	
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+	
+	public boolean save() {
+		if(this.validate()) {
+			this.vc.persist();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void clear() {
+		binder.readBean(this.vehicle);
 	}
 }

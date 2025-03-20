@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
-import com.andreabrun.vehiclemanagement.form.ImagePickerFormView;
 import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
+import com.andreabrun.vehiclemanagement.utils.StyleUtils;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
@@ -70,9 +70,6 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		initVehicleGallery();
 		add(vehicleGallery);
 		
-		ImagePickerFormView imgp = new ImagePickerFormView(vc);
-		this.add(imgp);
-		
 	}
 
 	private void initVehicleGallery() {
@@ -84,9 +81,14 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 			List<String> filesInFolder = PersistenceUtils.getFilesInFolder(assetsPath, true);
 			
 			for(String imgPath : filesInFolder) {
+				
 				Image img = ComponentsUtils.getImageFromPath(imgPath);
-				img.setHeight(300, Unit.PIXELS);
-				vehicleGallery.add(img);
+				img.getStyle().set("height", "100%");
+				Div imageDiv = new Div();
+				imageDiv.add(img);
+				StyleUtils.applyStyle(imageDiv, StyleUtils.VEHICLE_GALLERY_IMAGE_DIV_STYLE);
+				
+				vehicleGallery.add(imageDiv);
 			}
 		}
 		

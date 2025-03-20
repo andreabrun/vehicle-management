@@ -13,35 +13,34 @@ import com.vaadin.flow.component.textfield.TextField;
 public class ListStringField extends CustomField<List<String>>{
 
 	private static final long serialVersionUID = 1L;
-
-	private final int WIDTH = 300;
 	
 	private final VerticalLayout layout = new VerticalLayout();
 	private List<TextField> tfs;
 	
 	public ListStringField() {
+		
 		layout.addClassName("list-string-field");
 		
 		tfs = new ArrayList<TextField>();
 		
+		layout.getStyle().set("padding-left", "0").set("padding-right", "0");
+		
 		HorizontalLayout headerLayout = new HorizontalLayout();
-		headerLayout.setWidth(WIDTH + "px");
+		headerLayout.getStyle().set("width", "100%");
 		
 		Button addValueButton = new Button("+");
 		addValueButton.addClickListener(this::addTextFieldClick);
-		addValueButton.getStyle().set("width", WIDTH / 2 - 10 + "px");
+		addValueButton.getStyle().set("width", "40%");
 		headerLayout.add(addValueButton);
 		
 		Button removeValueButton = new Button("-");
-		removeValueButton.getStyle().set("width", WIDTH / 2 - 10 + "px");
+		removeValueButton.getStyle().set("width", "40%");
 		removeValueButton.addClickListener(this::removeTextFieldClick);
 		headerLayout.add(removeValueButton);
 		
 		layout.add(headerLayout);
 		
-		TextField tf = new TextField();
-		tfs.add(tf);
-		layout.add(tf);
+		addTextField();
 
         add(layout);
 	}
@@ -62,6 +61,7 @@ public class ListStringField extends CustomField<List<String>>{
 		TextField tf = new TextField();
 		if(s != null)
 			tf.setValue(s);
+		tf.getStyle().set("width", "100%");
 		tfs.add(tf);
 		layout.add(tf);
 	}

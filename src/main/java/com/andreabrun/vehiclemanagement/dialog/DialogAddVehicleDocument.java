@@ -1,6 +1,5 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
-import java.util.List;
 import java.util.Set;
 
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
@@ -71,14 +70,14 @@ public class DialogAddVehicleDocument extends Dialog {
 			
 			Set<String> filenames = uploadDocumentsForm.getFilenames();
 			if(filenames != null && filenames.size() > 0) {
-				List<String> uploadedDocuments = PersistenceUtils.saveUploadedDocuments(uploadDocumentsForm.getBuffer(), vd);
+				PersistenceUtils.saveUploadedDocuments(uploadDocumentsForm.getBuffer(), vd);
 			}
 			
-			Notification.show("Documenti salvato correttamente!");
+			Notification.show(MessagesUtils.VEHICLE_DOCUMENT_SAVED_SUCCESS);
 			this.vd = null;
 			this.close();
 		} else {
-			Notification.show("Correggere gli errori nel Form!");
+			Notification.show(MessagesUtils.ERROR);
 		}
 		
 	}
