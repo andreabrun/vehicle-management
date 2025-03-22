@@ -6,6 +6,7 @@ import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
 import com.andreabrun.vehiclemanagement.form.ImagePickerFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleFormView;
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
 import com.vaadin.flow.component.button.Button;
@@ -79,7 +80,7 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 
 		
 		// DELETE VEHICLE
-		buttonOpenDeleteVehicle = new Button("Elimina veicolo");
+		buttonOpenDeleteVehicle = new Button(MessagesUtils.VEHICLE_DELETE);
 		buttonOpenDeleteVehicle.addClickListener( e -> {
 			dialogDeleteVehicle.open();
 		});
@@ -88,7 +89,19 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		
 		
 		// EDIT VEHICLE
-		buttonOpenAddVehicleDocumentType = new Button("Aggiungi nuovo tipo di documento");
+		buttonEditVehicle = new Button(MessagesUtils.VEHICLE_EDIT);
+		buttonEditVehicle.addClickListener( e -> {
+			if(vehicleFormView != null) {
+				if(vehicleFormView.isEnabled())
+					vehicleFormView.executeEnable(false);
+				else vehicleFormView.executeEnable(true);
+			}
+		});
+		buttonEditVehicle.getStyle().set("margin", "5px");
+		vehiclesConfiguration.add(buttonEditVehicle);
+		
+		// AGGIUNGI TIPO DI DOCUMENTO
+		buttonOpenAddVehicleDocumentType = new Button(MessagesUtils.VEHICLE_ADD_DOCUMENT_TYPE);
 		buttonOpenAddVehicleDocumentType.addClickListener( e -> {
 			dialogAddVehicleDocumentType.open();
 		});
@@ -97,16 +110,6 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		
 		vehiclesConfiguration.setWidthFull();
 		vehiclesConfiguration.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-		
-		buttonEditVehicle = new Button("Modifica");
-		buttonEditVehicle.addClickListener( e -> {
-			if(vehicleFormView != null) {
-				if(vehicleFormView.isEnabled())
-					vehicleFormView.executeEnable(false);
-				else vehicleFormView.executeEnable(true);
-			}
-		});
-		vehiclesConfiguration.add(buttonEditVehicle);
 		
 		// LAYOUT DEBUG
 		//vehiclesConfiguration.getStyle().set("background-color", "yellow").set("border-style", "solid");

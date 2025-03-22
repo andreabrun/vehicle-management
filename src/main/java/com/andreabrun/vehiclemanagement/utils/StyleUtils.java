@@ -42,7 +42,11 @@ public class StyleUtils {
 	
 	public static Style VEHICLE_GALLERY_IMAGE_DIV_STYLE = new Div().getStyle().set("overflow", "hidden")
 			.set("vertical-align", "center").set("border-radius", "15px").set("display", "flex").set("justify-content", "center")
-			.set("width", "260px").set("height", "200px").set("margin", "5px");
+			.set("width", "260px").set("height", "200px").set("margin", "5px").set("position", "relative");
+	
+	public static Style DELETE_ASSET_DOCUMENT_BUTTON_STYLE = new Div().getStyle().set("position", "absolute").set("top","5px").set("right", "10px")
+			.set("background-color", "red").set("border-radius", "10px").set("cursor", "pointer")
+			.set("color", "white").set("border", "1px solid white");
 	
 	public static Style GALLERY_VIEW_IMAGE_DIV_STYLE = new Div().getStyle().set("overflow", "hidden")
 			.set("vertical-align", "center").set("border-radius", "15px").set("display", "flex").set("justify-content", "center").set("margin", "5px");

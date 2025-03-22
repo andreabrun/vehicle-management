@@ -16,6 +16,7 @@ import com.andreabrun.vehiclemanagement.entities.services.Persistable;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleXMLService;
 import com.andreabrun.vehiclemanagement.utils.Comparators;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceHelper;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.vaadin.flow.component.html.Image;
@@ -110,7 +111,7 @@ public class VehicleContainer implements Persistable {
     }
     
     public String getCoverImagePath() {
-        return getAssetsPath() + "/" + getCoverImageName();
+        return getAssetsPath() + getCoverImageName();
     }
     
     public void addDocumentType(VehicleDocumentType vdt) {
@@ -155,6 +156,20 @@ public class VehicleContainer implements Persistable {
 		deleteAssetsFolder();
 		deleteDocumentsFolder();
 		PersistenceUtils.delete(getFileName());
+	}
+	
+	public void deleteDocument(VehicleDocument vd) {
+		List<VehicleDocument> documents = getAllDocuments();
+		if(documents.contains(vd)) {
+			PersistenceUtils.delete(vd.getDocumentsPath());
+			PersistenceUtils.delete(vd.getFileName());
+		}
+	}
+	
+	public void deleteAsset(String assetPath) throws Exception {
+		if(assetPath.equals(this.getCoverImagePath())) 
+			throw new Exception(MessagesUtils.CANNOT_DELETE_BESAUSE_USED);
+		PersistenceUtils.delete(assetPath);
 	}
 	
 	public List<VehicleDocument> getAllDocuments() {

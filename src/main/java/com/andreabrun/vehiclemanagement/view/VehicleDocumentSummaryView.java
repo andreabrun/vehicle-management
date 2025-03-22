@@ -16,8 +16,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 public class VehicleDocumentSummaryView extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
+    
+    public static final int WIDTH = 300;
 
-	public VehicleDocumentSummaryView(VehicleDocument vd, int width) {
+	public VehicleDocumentSummaryView(VehicleDocument vd) {
 		
 		super();
 		
@@ -45,7 +47,7 @@ public class VehicleDocumentSummaryView extends VerticalLayout {
 		add(outputComponents);
 		
 		StyleUtils.applyStyle(this, StyleUtils.VEHICLE_DOCUMENT_VIEW_STYLE);
-		setWidth(width, Unit.PIXELS);
+		setWidth(WIDTH, Unit.PIXELS);
         
 	}
 }

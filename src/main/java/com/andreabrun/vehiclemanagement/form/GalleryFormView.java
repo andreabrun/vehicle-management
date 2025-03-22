@@ -17,7 +17,7 @@ public class GalleryFormView extends FlexLayout {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final int WIDTH = 330;
+	private static final int WIDTH = 350;
 	private static final int MINWIDTH_IMG = 100;
 	
 
@@ -51,6 +51,8 @@ public class GalleryFormView extends FlexLayout {
 			}
 			
 		}
+		
+		this.setFlexWrap(FlexLayout.FlexWrap.WRAP);
 	}
 	
 	public void setImages(List<Image> images) {

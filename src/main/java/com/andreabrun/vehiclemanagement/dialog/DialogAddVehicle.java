@@ -5,6 +5,7 @@ import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
 import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleFormView;
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
 import com.vaadin.flow.component.ClickEvent;
@@ -17,7 +18,6 @@ import com.vaadin.flow.server.VaadinSession;
 public class DialogAddVehicle extends Dialog {
 	
 	private static final long serialVersionUID = 1L;
-	public final String title = "New Vehicle";
 	
 	private VehicleSessionBean vsbean;
 	
@@ -31,13 +31,13 @@ public class DialogAddVehicle extends Dialog {
 		
 		init();
 		
-		setHeaderTitle(title);
+		setHeaderTitle(MessagesUtils.VEHICLE_ADD_NEW);
 		form = new VehicleFormView(v, vc);
 		StyleUtils.applyStyle(form, StyleUtils.VEHICLE_FORM_VIEW_STYLE);
 		form.applyStyleToInputComponents(StyleUtils.VEHICLE_FORM_VIEW_INPUT_STYLE);
 		add(form);
 		
-		NativeLabel coverImageTitle = new NativeLabel("Upload cover image");
+		NativeLabel coverImageTitle = new NativeLabel(MessagesUtils.VEHICLE_UPLOAD_COVER_IMAGE);
 		coverImageForm = new UploadFormView(UploadFormView.TYPE_IMAGE);
 		add(coverImageTitle, coverImageForm);
 		
@@ -67,10 +67,10 @@ public class DialogAddVehicle extends Dialog {
 			this.vc.persist();
 			this.vsbean.update();
 			
-			Notification.show("Veicolo salvato correttamente!");
+			Notification.show(MessagesUtils.VEHICLE_SAVED_SUCCESS);
 			this.close();
 		} else {
-			Notification.show("Correggere gli errori nel Form!");
+			Notification.show(MessagesUtils.FIX_ERRORS_IN_FORM);
 		}
 		
 	}

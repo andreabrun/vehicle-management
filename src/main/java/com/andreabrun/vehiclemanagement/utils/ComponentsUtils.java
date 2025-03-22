@@ -47,4 +47,25 @@ public class ComponentsUtils {
 		
 		return res;
 	}
+	
+	public static Anchor getImageAnchorFromPath(String path) {
+		File f = new File(path);
+
+        StreamResource resource = new StreamResource(
+            f.getName(), 
+            () -> {
+                try {
+                    return new FileInputStream(f);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        );
+        
+        Anchor res = new Anchor(resource, "");
+        res.setTarget("_blank"); // Open in a new tab
+		
+		return res;
+	}
 }

@@ -20,7 +20,6 @@ import com.vaadin.flow.server.VaadinSession;
 public class DialogAddVehicleDocument extends Dialog {
 	
 	private static final long serialVersionUID = 1L;
-	public final String title = "Add Document";
 	
 	private VehicleSessionBean vsbean;
 	
@@ -36,7 +35,7 @@ public class DialogAddVehicleDocument extends Dialog {
 		init();
 		
 		if(vc != null) {
-			setHeaderTitle(title);
+			setHeaderTitle(MessagesUtils.VEHICLE_ADD_ASSETS);
 			form = new VehicleDocumentFormView(vd, vc);
 			add(form);
 			

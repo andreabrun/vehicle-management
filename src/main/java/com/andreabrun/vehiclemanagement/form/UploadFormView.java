@@ -1,6 +1,7 @@
 package com.andreabrun.vehiclemanagement.form;
 import java.io.IOException;
 
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,8 +14,6 @@ public class UploadFormView extends VerticalLayout {
     
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_DOCUMENT = "document";
-    
-    public static final int WIDTH = 300;
     
     private final String type;
     private final int maxFileSize = 2097152; // 20 MB
@@ -44,17 +43,19 @@ public class UploadFormView extends VerticalLayout {
 				exp.printStackTrace();
 			}
 
-            Notification.show("File uploaded: " + filename + " (" + fileSize + " bytes)");
+            Notification.show(MessagesUtils.FILE_UPLOADED + ": " + filename + " (" + fileSize + " bytes)");
             
         });
 
-        Button clearButton = new Button("Clear", event -> {
+        Button clearButton = new Button(MessagesUtils.CLEAR, event -> {
         	upload.clearFileList();
         	filename = null;
         });
-
+        clearButton.setWidth("100%");
+        upload.setWidth("100%");
+        
         add(upload, clearButton);
-        setWidth(WIDTH + "px");
+        setWidth("100%");
     }
 	
 	private void setAcceptedFileTypes() {

@@ -22,7 +22,7 @@ public class VehicleDocument implements Persistable {
 	// The filename will be PERSISTENCE_KEY + id
 	public static final String PERSISTENCE_KEY = "VehicleDocument";
 	public static final String PERSISTENCE_FOLDER_KEY = "VDocs";
-	
+
 	Long id;
 	
 	@UserFillable(label = "Categoria", order = 0, type = UserFillable.COMBOBOX, valueSource = "getVehicleDocumentTypeKeys")
@@ -123,8 +123,13 @@ public class VehicleDocument implements Persistable {
 		return date;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@XmlElement
+	public String getVdPath() {
+		return this.vdPath;
 	}
 
 	public void setKey(String key) {
@@ -147,10 +152,9 @@ public class VehicleDocument implements Persistable {
 		this.documentsPath = documentsPath;
 	}
 	
-	public void setvdPath(String vdPath) {
+	public void setVdPath(String vdPath) {
 		this.vdPath = vdPath;
 	}
-
 	public void setCharge(Float charge) {
 		this.charge = charge;
 	}
@@ -174,6 +178,14 @@ public class VehicleDocument implements Persistable {
 	public String getFileName() {
 		return vdPath + "/" + PERSISTENCE_KEY + id.toString() + PersistenceUtils.EXT;
 	}
+	
+	@Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; 
+        if (obj == null || getClass() != obj.getClass()) return false;
+        VehicleDocument vd = (VehicleDocument) obj;
+        return id.equals(vd.getId()) && vdPath.equals(vd.getVdPath());
+    }
 
 	@Override
 	public void persist() {

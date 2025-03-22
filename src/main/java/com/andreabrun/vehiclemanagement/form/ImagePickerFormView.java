@@ -33,7 +33,7 @@ public class ImagePickerFormView extends VerticalLayout {
 		
 		this.vc = vc;
 		
-		add(new H4("Select cover image"));
+		add(new H4(MessagesUtils.SELECT_COVER_IMAGE));
 		
 		this.vehicleGallery = new GalleryFormView();
 		

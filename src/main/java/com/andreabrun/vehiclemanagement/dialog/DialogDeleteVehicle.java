@@ -11,7 +11,6 @@ import com.vaadin.flow.server.VaadinSession;
 public class DialogDeleteVehicle extends Dialog {
 	
 	private static final long serialVersionUID = 1L;
-	public final String title = "Delete ";
 	
 	private VehicleSessionBean vsbean;
 	
@@ -23,12 +22,12 @@ public class DialogDeleteVehicle extends Dialog {
 		init();
 		
 		if(vc != null)
-			setHeaderTitle(title + " " + vc.getVehicle().getName() + "?");
+			setHeaderTitle(MessagesUtils.SURE_TO_DELETE + " " + vc.getVehicle().getName() + "?");
 		else 
 			setHeaderTitle(MessagesUtils.ERROR_VEHICLE_NOT_SELECTED_TITLE);
 		
-		Button buttonConfirm = new Button("Confirm");
-		Button buttonCancel = new Button("Cancel", e -> this.close());
+		Button buttonConfirm = new Button(MessagesUtils.CONFIRM);
+		Button buttonCancel = new Button(MessagesUtils.CANCEL, e -> this.close());
 		
 		buttonConfirm.addClickListener(this::delete);
 		

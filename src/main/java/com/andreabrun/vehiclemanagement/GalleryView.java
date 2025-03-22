@@ -1,21 +1,23 @@
 package com.andreabrun.vehiclemanagement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicleAsset;
+import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicleAsset;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
-import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
+import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -29,19 +31,22 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 	private VehicleSessionBean vsbean;
 	
 	private VehicleContainer vc;
-	
-	H1 h1Title;
+
 	FlexLayout vehicleGallery;
-	UploadFormView uploadImageForm;
 	
-	String title = "Gallery";
+	Button buttonAddVehicleAsset;
+	DialogAddVehicleAsset dialogAddVehicleAsset;
+	
+	Button buttonDeleteVehicleAssets;
+	List<Button> buttonsDeleteVehicleAsset;
+	boolean enabledDelete = false;
+	Map<Button, DialogDeleteVehicleAsset> dialogsDeleteVehicleAssetMap;
 	
 	public GalleryView() {
 		
 		init();
 		
 		initComponents();
-
 	}
 	
 	public void updateComponents() {
@@ -54,18 +59,34 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 	}
 	
 	private void initComponents() {
+
+		buttonsDeleteVehicleAsset = new ArrayList<Button>();
+		dialogsDeleteVehicleAssetMap = new HashMap<Button, DialogDeleteVehicleAsset>();
 		
-		String titleContent = (vc != null ? title + " " + vc.getVehicle().getName() : title);
-		H1 h1Title = new H1(titleContent);
-		add(h1Title);
+		initDialogs();
 		
-		if(vc != null) {
-			H4 uploadImageH4 = new H4("Upload image");
-			uploadImageForm = new UploadFormView(UploadFormView.TYPE_IMAGE);
-			Button buttonUpload = new Button("Upload");
-			buttonUpload.addClickListener(this::uploadImage);
-			add(uploadImageH4, uploadImageForm, buttonUpload);
-		}
+		FlexLayout configurationLayout = new FlexLayout();
+		
+		// ADD NEW VEHICLE ASSET
+		buttonAddVehicleAsset = new Button(MessagesUtils.VEHICLE_ADD_ASSETS);
+		buttonAddVehicleAsset.addClickListener( e -> {
+			dialogAddVehicleAsset.open();
+		});
+		buttonAddVehicleAsset.getStyle().set("margin", "5px");
+		configurationLayout.add(buttonAddVehicleAsset);
+
+		// DELETE VEHICLE ASSET
+		buttonDeleteVehicleAssets = new Button(MessagesUtils.VEHICLE_DELETE_ASSETS);
+		buttonDeleteVehicleAssets.addClickListener( e -> {
+			this.executeEnableDelete();
+		});
+		buttonDeleteVehicleAssets.getStyle().set("margin", "5px");
+		configurationLayout.add(buttonDeleteVehicleAssets);
+		
+		configurationLayout.setWidthFull();
+		configurationLayout.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+
+		add(configurationLayout);
 		
 		initVehicleGallery();
 		add(vehicleGallery);
@@ -79,15 +100,32 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		if(vc != null) {
 			String assetsPath = vc.getAssetsPath();
 			List<String> filesInFolder = PersistenceUtils.getFilesInFolder(assetsPath, true);
-			
+
 			for(String imgPath : filesInFolder) {
 				
 				Image img = ComponentsUtils.getImageFromPath(imgPath);
 				img.getStyle().set("height", "100%");
 				Div imageDiv = new Div();
-				imageDiv.add(img);
-				StyleUtils.applyStyle(imageDiv, StyleUtils.VEHICLE_GALLERY_IMAGE_DIV_STYLE);
 				
+				Anchor imageLink = ComponentsUtils.getImageAnchorFromPath(imgPath);
+				imageLink.add(img);
+				imageDiv.add(imageLink);
+				
+				Button buttonDeleteVehicleAsset = new Button(MessagesUtils.DELETE);
+				StyleUtils.applyStyle(buttonDeleteVehicleAsset, StyleUtils.DELETE_ASSET_DOCUMENT_BUTTON_STYLE);
+				buttonDeleteVehicleAsset.getStyle().set("display", "none");
+				
+				DialogDeleteVehicleAsset dialogDeleteVehicleAsset = new DialogDeleteVehicleAsset(vc, imgPath);
+				dialogsDeleteVehicleAssetMap.put(buttonDeleteVehicleAsset, dialogDeleteVehicleAsset);
+				
+				buttonDeleteVehicleAsset.addClickListener( e -> {
+					DialogDeleteVehicleAsset dialog = dialogsDeleteVehicleAssetMap.get(e.getSource());
+					dialog.open();
+				});
+				buttonsDeleteVehicleAsset.add(buttonDeleteVehicleAsset);
+				imageDiv.add(buttonDeleteVehicleAsset);
+				
+				StyleUtils.applyStyle(imageDiv, StyleUtils.VEHICLE_GALLERY_IMAGE_DIV_STYLE);
 				vehicleGallery.add(imageDiv);
 			}
 		}
@@ -95,13 +133,21 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		vehicleGallery.setWidthFull();
 		vehicleGallery.setFlexWrap(FlexLayout.FlexWrap.WRAP);
 		
-		// LAYOUT DEBUG
-		//vehiclesConfiguration.getStyle().set("background-color", "yellow").set("border-style", "solid");
-		
+	}
+	
+	private void initDialogs() {
+		dialogAddVehicleAsset = new DialogAddVehicleAsset(vc);
 	}
 	
 	public void setVehicleContainer(VehicleContainer vc) {
 		this.vc = vc;
+	}
+	
+	public void executeEnableDelete() {
+		for (Button button : buttonsDeleteVehicleAsset) {
+			button.getStyle().set("display", enabledDelete ? "none" : "block");
+		}
+		enabledDelete = !enabledDelete;
 	}
 	
 	public void init() {
@@ -110,14 +156,5 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		
 		SelectedVehicleContainerListener listener = new SelectedVehicleContainerListener(this);
 		vsbean.addPropertyChangeListener(listener);
-	}
-	
-	private void uploadImage(ClickEvent<?> e) {
-		
-		if(uploadImageForm.getFilename() != null && vc != null) {
-			String uploadedImage = PersistenceUtils.saveUploadedImage(uploadImageForm.getBuffer(), vc);
-			Notification.show("Immagine caricata correttamente! " + uploadedImage);
-		}
-		
 	}
 }
