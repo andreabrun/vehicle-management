@@ -123,6 +123,11 @@ public class VehicleContainer implements Persistable {
 		return documentTypes.get(key);
 	}
 	
+	public void removeDocumentType(VehicleDocumentType vdt) {
+		if(vdt != null)
+    		this.documentTypes.remove(vdt.getKey());
+	}
+	
 	@Override
 	public String getFileName() {
 		return PersistenceUtils.VEHICLE_PATH + PERSISTENCE_KEY + id.toString() + PersistenceUtils.EXT;
@@ -190,6 +195,19 @@ public class VehicleContainer implements Persistable {
 		}
 		
 		return documents;
+	}
+	
+	public List<VehicleDocument> getDocumentsByType(String key) {
+		
+		List<VehicleDocument> documents = getAllDocuments();
+		List<VehicleDocument> res = new ArrayList<VehicleDocument>();
+		
+		for (VehicleDocument vd : documents) {
+			if(vd.getKey() != null && vd.getKey().equals(key)) {
+				res.add(vd);
+			}
+		}
+		return res;
 	}
 	
 	public List<VehicleDocument> getAllDocumentsOrderedByDate() {

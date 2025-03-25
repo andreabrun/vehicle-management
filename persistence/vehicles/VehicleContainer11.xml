@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vehicleContainer>
+    <documentTypes>
+        <entry>
+            <key>Generic</key>
+            <value>
+                <id>16</id>
+                <key>Generic</key>
+                <stringMileageInterval>0</stringMileageInterval>
+                <stringTimeInterval>0|-|0|-|0</stringTimeInterval>
+            </value>
+        </entry>
+        <entry>
+            <key>Tagliando</key>
+            <value>
+                <id>18</id>
+                <key>Tagliando</key>
+                <stringMileageInterval>10000</stringMileageInterval>
+                <stringTimeInterval>0|-|0|-|0</stringTimeInterval>
+            </value>
+        </entry>
+    </documentTypes>
+    <id>11</id>
+    <vehicle>
+        <brand></brand>
+        <displacement></displacement>
+        <id>13</id>
+        <model></model>
+        <name>New Vehicle</name>
+        <numberPlate></numberPlate>
+        <power></power>
+        <powerSource></powerSource>
+        <type></type>
+        <vin></vin>
+    </vehicle>
+</vehicleContainer>
