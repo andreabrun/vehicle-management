@@ -27,20 +27,18 @@ public class PersistenceHelper implements Persistable {
 	
 	public static PersistenceHelper getCurrent() {
 		
-		PersistenceHelper currentPersistenceHelper = VaadinSession.getCurrent().getAttribute(PersistenceHelper.class);
+		PersistenceHelper currentPersistenceHelper = null;
 		
+		try {
+			if(PersistenceUtils.isFilePresent(PersistenceUtils.PERSISTENCEHELPER_PATH, PERSISTENCEHELPER_FILENAME)) {
+				currentPersistenceHelper = (PersistenceHelper) VehicleXMLService.unmarshalFromXML(PERSISTENCEHELPER_PATH, PersistenceHelper.class);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
 		if(currentPersistenceHelper == null) {
-			
-			try {
-				if(PersistenceUtils.isFilePresent(PERSISTENCEHELPER_PATH, PERSISTENCEHELPER_FILENAME))
-					currentPersistenceHelper = (PersistenceHelper) VehicleXMLService.unmarshalFromXML(PERSISTENCEHELPER_PATH, PersistenceHelper.class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			if(currentPersistenceHelper == null) {
-				currentPersistenceHelper = new PersistenceHelper();
-			}
+			currentPersistenceHelper = new PersistenceHelper();
 		}
 		
 		VaadinSession.getCurrent().setAttribute(PersistenceHelper.class, currentPersistenceHelper);
