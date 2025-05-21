@@ -1,7 +1,10 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
+import com.andreabrun.vehiclemanagement.VehicleManagementVehicleContainerPage;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEvent;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
@@ -21,7 +24,13 @@ public class DialogAddVehicleAsset extends Dialog {
 	
 	private UploadFormView form;
 	
-	public DialogAddVehicleAsset(VehicleContainer vc) {
+	private VehicleManagementVehicleContainerPage parent;
+	private PageChangedEventPublisher eventPublisher;
+	
+	public DialogAddVehicleAsset(VehicleContainer vc, VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+		
+		this.parent = parent;
+		this.eventPublisher = eventPublisher;
 		
 		this.vc = vc;
 		init();
@@ -53,6 +62,7 @@ public class DialogAddVehicleAsset extends Dialog {
 		if(form.getFilename() != null && vc != null) {
 			String uploadedImage = PersistenceUtils.saveUploadedImage(form.getBuffer(), vc);
 			Notification.show(MessagesUtils.FILE_UPLOADED + uploadedImage);
+			eventPublisher.fireEvent(new PageChangedEvent(parent));
 			this.close();
 		}
 		

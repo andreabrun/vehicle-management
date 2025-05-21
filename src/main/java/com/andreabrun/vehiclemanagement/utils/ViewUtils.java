@@ -2,6 +2,7 @@ package com.andreabrun.vehiclemanagement.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +76,15 @@ public class ViewUtils {
         		label = fieldName;
 
     		Object result = invokeGetter(obj, fieldName);
-    		String value = result != null ? result.toString() : null;
+    		String value = null;
+    		if(result != null) {
+    			if (result instanceof Period) {
+					Period p = (Period) result;
+					value = p.getYears() + "Y " + p.getMonths() + "M " + p.getDays() + "D";
+				} else {
+					value = result.toString();
+				}
+    		}
     		
     		Component container = createSimpleOutputComponents(label, value);
     		res.add(container);

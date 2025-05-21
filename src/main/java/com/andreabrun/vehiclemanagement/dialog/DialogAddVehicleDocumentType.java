@@ -1,8 +1,11 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
+import com.andreabrun.vehiclemanagement.VehicleManagementVehicleContainerPage;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocumentType;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEvent;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.form.VehicleDocumentTypeFormView;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.vaadin.flow.component.ClickEvent;
@@ -23,7 +26,13 @@ public class DialogAddVehicleDocumentType extends Dialog {
 	
 	private VehicleDocumentTypeFormView form;
 	
-	public DialogAddVehicleDocumentType(VehicleContainer vc) {
+	private VehicleManagementVehicleContainerPage parent;
+	private PageChangedEventPublisher eventPublisher;
+	
+	public DialogAddVehicleDocumentType(VehicleContainer vc, VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+		
+		this.parent = parent;
+		this.eventPublisher = eventPublisher;
 		
 		this.vc = vc;
 		init();
@@ -60,6 +69,7 @@ public class DialogAddVehicleDocumentType extends Dialog {
 			
 			Notification.show("Tipo documento salvato correttamente!");
 			this.vdt = null;
+			eventPublisher.fireEvent(new PageChangedEvent(parent));
 			this.close();
 		} else {
 			Notification.show("Correggere gli errori nel Form!");

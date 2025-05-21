@@ -11,8 +11,10 @@ import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicleDocumentType;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocumentType;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.form.ImagePickerFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleFormView;
+import com.andreabrun.vehiclemanagement.listeners.PageChangedListener;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
@@ -32,6 +34,7 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	private static final long serialVersionUID = 1L;
 	
 	private VehicleSessionBean vsbean;
+	private final PageChangedEventPublisher eventPublisher = new PageChangedEventPublisher();
 	private VehicleContainer vc;
 	
 	FlexLayout vehiclesConfiguration;
@@ -62,6 +65,8 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		
 		SelectedVehicleContainerListener listener = new SelectedVehicleContainerListener(this);
 		vsbean.addPropertyChangeListener(listener);
+		
+		eventPublisher.addListener(new PageChangedListener());
 	}
 		
 	public void setVehicleContainer(VehicleContainer vc) {
@@ -128,7 +133,8 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		buttonOpenAddVehicleDocumentType.getStyle().set("margin", "5px");
 		vehiclesConfiguration.add(buttonOpenAddVehicleDocumentType);
 		
-		// DELETE VEHICLE ASSET
+		// DELETE VEHICLE DOCUMENT TYPE
+		enabledDeleteVDT = false;
 		buttonDeleteVDTS = new Button(MessagesUtils.VEHICLE_DELETE_DOCUMENT_TYPE);
 		buttonDeleteVDTS.addClickListener( e -> {
 			this.executeEnableDeleteVDT();
@@ -177,7 +183,7 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 				StyleUtils.applyStyle(buttonDeleteVDT, StyleUtils.DELETE_ASSET_DOCUMENT_BUTTON_STYLE);
 				buttonDeleteVDT.getStyle().set("display", "none");
 				
-				DialogDeleteVehicleDocumentType dialogDeleteVDT = new DialogDeleteVehicleDocumentType(vc, vdt);
+				DialogDeleteVehicleDocumentType dialogDeleteVDT = new DialogDeleteVehicleDocumentType(vc, vdt, this, eventPublisher);
 
 				// Add Button,Dialog to Map
 				dialogsDeleteVDTMap.put(buttonDeleteVDT, dialogDeleteVDT);
@@ -202,7 +208,7 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	
 	private void initDialogs() {
 		dialogDeleteVehicle = new DialogDeleteVehicle(vc);
-		dialogAddVehicleDocumentType = new DialogAddVehicleDocumentType(vc);
+		dialogAddVehicleDocumentType = new DialogAddVehicleDocumentType(vc, this, eventPublisher);
 	}
 	
 	public void executeEnableDeleteVDT() {

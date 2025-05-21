@@ -1,7 +1,10 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
+import com.andreabrun.vehiclemanagement.VehicleManagementVehicleContainerPage;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
+import com.andreabrun.vehiclemanagement.events.PageChangedEvent;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.ViewUtils;
 import com.vaadin.flow.component.ClickEvent;
@@ -16,7 +19,13 @@ public class DialogDeleteVehicleDocument extends Dialog {
 	private VehicleContainer vc = null;
 	private VehicleDocument vd = null;
 	
-	public DialogDeleteVehicleDocument(VehicleContainer vc, VehicleDocument vd) {
+	private VehicleManagementVehicleContainerPage parent;
+	private PageChangedEventPublisher eventPublisher;
+	
+	public DialogDeleteVehicleDocument(VehicleContainer vc, VehicleDocument vd, VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+		
+		this.parent = parent;
+		this.eventPublisher = eventPublisher;
 		
 		this.vc = vc;
 		this.vd = vd;
@@ -43,6 +52,7 @@ public class DialogDeleteVehicleDocument extends Dialog {
 		if(vc != null && vd != null) {
 			vc.deleteDocument(vd);
 			Notification.show(MessagesUtils.VEHICLE_DOCUMENT_DELETED);
+			eventPublisher.fireEvent(new PageChangedEvent(parent));
 			this.close();
 		}
 	}

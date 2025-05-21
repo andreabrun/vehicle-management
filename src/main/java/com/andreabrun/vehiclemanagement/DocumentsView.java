@@ -10,6 +10,8 @@ import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
+import com.andreabrun.vehiclemanagement.listeners.PageChangedListener;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
@@ -27,6 +29,7 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 	private static final long serialVersionUID = 1L;
 	
 	private VehicleSessionBean vsbean;
+	private final PageChangedEventPublisher eventPublisher = new PageChangedEventPublisher();
 	
 	private VehicleContainer vc;
 	
@@ -77,6 +80,8 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 		configurationLayout.add(buttonAddVehicleDocument);
 		
 		// ADD DELETE VEHICLE DOCUMENT
+		enabledDelete = false;
+		
 		buttonDeleteVehicleDocument = new Button(MessagesUtils.VEHICLE_DELETE_DOCUMENTS);
 		buttonDeleteVehicleDocument.addClickListener( e -> {
 			this.executeEnableDelete();
@@ -111,7 +116,7 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 				StyleUtils.applyStyle(buttonDeleteVehicleDocument, StyleUtils.DELETE_ASSET_DOCUMENT_BUTTON_STYLE);
 				buttonDeleteVehicleDocument.getStyle().set("display", "none");
 				
-				DialogDeleteVehicleDocument dialogDeleteVehicleDocument = new DialogDeleteVehicleDocument(vc, vd);
+				DialogDeleteVehicleDocument dialogDeleteVehicleDocument = new DialogDeleteVehicleDocument(vc, vd, this, eventPublisher);
 				dialogsDeleteVehicleDocumentMap.put(buttonDeleteVehicleDocument, dialogDeleteVehicleDocument);
 				
 				buttonDeleteVehicleDocument.addClickListener( e -> {
@@ -134,7 +139,7 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 	}
 	
 	private void initDialogs() {
-		dialogAddNewVehicleDocument = new DialogAddVehicleDocument(vc);
+		dialogAddNewVehicleDocument = new DialogAddVehicleDocument(vc, this, eventPublisher);
 	}
 	
 	public void setVehicleContainer(VehicleContainer vc) {
@@ -154,6 +159,9 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 		
 		SelectedVehicleContainerListener listener = new SelectedVehicleContainerListener(this);
 		vsbean.addPropertyChangeListener(listener);
+		
+		eventPublisher.addListener(new PageChangedListener());
+		
 	}
 
 }
