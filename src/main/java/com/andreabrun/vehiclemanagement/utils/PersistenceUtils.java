@@ -15,10 +15,22 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 
 public class PersistenceUtils {
 	
-	public static final String VEHICLE_PATH = "persistence/vehicles/";
-	public static final String ASSETS_PATH = "persistence/assets/";
-	public static final String DOCUMENTS_PATH = "persistence/documents/";
-	public static final String PERSISTENCEHELPER_PATH = "persistence/persistence/";
+	public static final String BASE_PATH;
+	
+	// 20250618: Fix FileNotFoundException on windows
+	static {
+        String basePathProp = System.getProperty("base.path");
+        if (basePathProp != null) {
+            BASE_PATH = basePathProp + "/";
+        } else {
+            BASE_PATH = "";
+        }
+    }
+	
+	public static final String VEHICLE_PATH = BASE_PATH + "persistence/vehicles/";
+	public static final String ASSETS_PATH = BASE_PATH + "persistence/assets/";
+	public static final String DOCUMENTS_PATH = BASE_PATH + "persistence/documents/";
+	public static final String PERSISTENCEHELPER_PATH = BASE_PATH + "persistence/persistence/";
 	
 	public static final String ASSETS_KEY = "asset";
 	public static final String DOCUMENTS_KEY = "document";
