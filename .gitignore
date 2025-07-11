@@ -1,1 +1,36 @@
+/persistence/
+
+# Maven
 /target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Vaadin
+/node_modules/
+frontend/generated/
+src/main/frontend/generated/
+.flow/
+.vaadin/
+webpack.generated.js
+vite.generated.ts
+vaadin-dev-server-settings.json
+
+# IntelliJ / Eclipse / VS Code
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*

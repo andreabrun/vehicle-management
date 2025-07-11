@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicleDocument;
 import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicleDocument;
+import com.andreabrun.vehiclemanagement.dialog.DialogEditVehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
@@ -41,6 +42,12 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 	boolean enabledDelete = false;
 	Map<Button, DialogDeleteVehicleDocument> dialogsDeleteVehicleDocumentMap;
 	
+	// 20250711
+	Button buttonEditVehicleDocument;
+	List<Button> buttonsEditVehicleDocument;
+	boolean enabledEdit = false;
+	Map<Button, DialogEditVehicleDocument> dialogsEditVehicleDocumentMap;
+	
 	FlexLayout vehicleDocuments;
 	
 	public DocumentsView() {
@@ -65,6 +72,10 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 		buttonsDeleteVehicleDocument = new ArrayList<Button>();
 		dialogsDeleteVehicleDocumentMap = new HashMap<Button, DialogDeleteVehicleDocument>();
 		
+		// 20250711
+		buttonsEditVehicleDocument = new ArrayList<Button>();
+		dialogsEditVehicleDocumentMap = new HashMap<Button, DialogEditVehicleDocument>();
+		
 		initDialogs();
 		
 		add(dialogAddNewVehicleDocument);
@@ -88,6 +99,17 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 		});
 		buttonDeleteVehicleDocument.getStyle().set("margin", "5px");
 		configurationLayout.add(buttonDeleteVehicleDocument);
+		
+		// 20250711: Add edit vehicle document functionality
+		// ADD EDIT VEHICLE DOCUMENT
+		enabledEdit = false;
+		
+		buttonEditVehicleDocument = new Button(MessagesUtils.VEHICLE_EDIT_DOCUMENTS);
+		buttonEditVehicleDocument.addClickListener( e -> {
+			this.executeEnableEdit();
+		});
+		buttonEditVehicleDocument.getStyle().set("margin", "5px");
+		configurationLayout.add(buttonEditVehicleDocument);
 		
 		configurationLayout.setWidthFull();
 		configurationLayout.setFlexWrap(FlexLayout.FlexWrap.WRAP);
@@ -126,6 +148,22 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 				buttonsDeleteVehicleDocument.add(buttonDeleteVehicleDocument);
 				div.add(buttonDeleteVehicleDocument);
 				
+				// 20250711
+				Button buttonEditVehicleDocument = new Button(MessagesUtils.EDIT);
+				StyleUtils.applyStyle(buttonEditVehicleDocument, StyleUtils.EDIT_ASSET_DOCUMENT_BUTTON_STYLE);
+				buttonEditVehicleDocument.getStyle().set("display", "none");
+				
+				DialogEditVehicleDocument dialogEditVehicleDocument = new DialogEditVehicleDocument(vc, vd, this, eventPublisher);
+				dialogsEditVehicleDocumentMap.put(buttonEditVehicleDocument, dialogEditVehicleDocument);
+				
+				buttonEditVehicleDocument.addClickListener( e -> {
+					DialogEditVehicleDocument dialog = dialogsEditVehicleDocumentMap.get(e.getSource());
+					dialog.open();
+				});
+				buttonsEditVehicleDocument.add(buttonEditVehicleDocument);
+				
+				div.add(buttonEditVehicleDocument);
+				
 				vehicleDocuments.add(div);
 			}
 		}
@@ -147,10 +185,21 @@ public class DocumentsView extends VerticalLayout implements VehicleManagementVe
 	}
 	
 	public void executeEnableDelete() {
+		if(enabledEdit)
+			executeEnableEdit();
 		for (Button button : buttonsDeleteVehicleDocument) {
 			button.getStyle().set("display", enabledDelete ? "none" : "block");
 		}
 		enabledDelete = !enabledDelete;
+	}
+	
+	public void executeEnableEdit() {
+		if(enabledDelete)
+			executeEnableDelete();
+		for (Button button : buttonsEditVehicleDocument) {
+			button.getStyle().set("display", enabledEdit ? "none" : "block");
+		}
+		enabledEdit = !enabledEdit;
 	}
 	
 	public void init() {

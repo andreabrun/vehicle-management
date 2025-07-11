@@ -8,6 +8,7 @@ public class MessagesUtils {
 	public static final String CANCEL =				 				"Cancel";
 	public static final String UPLOAD =				 				"Upload";
 	public static final String DELETE =				 				"Elimina";
+	public static final String EDIT =				 				"Modifica";
 	public static final String ERROR_VEHICLE_NOT_SELECTED_TITLE = 	"Errore! Veicolo non selezionato!";
 	public static final String ERROR_DOCUMENT_NOT_SELECTED_TITLE = 	"Errore! Documento non selezionato!";
 	public static final String INFO_VEHICLE_COVER_SAVED_SUCCESS = 	"Immagine impostata correttamente";
@@ -18,6 +19,7 @@ public class MessagesUtils {
 	public static final String VEHICLE_DELETE = 					"Elimina veicolo";
 	public static final String VEHICLE_EDIT = 						"Modifica veicolo";
 	public static final String VEHICLE_ADD_DOCUMENTS = 				"Aggiungi documento";
+	public static final String VEHICLE_EDIT_DOCUMENTS = 			"Modifica documento";
 	public static final String VEHICLE_DELETE_DOCUMENTS = 			"Elimina documento";
 	public static final String VEHICLE_ADD_ASSETS = 				"Aggiungi immagini";
 	public static final String VEHICLE_DELETE_ASSETS = 				"Elimina immagini";
