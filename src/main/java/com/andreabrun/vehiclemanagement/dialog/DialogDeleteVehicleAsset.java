@@ -1,6 +1,9 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
+import com.andreabrun.vehiclemanagement.VehicleManagementVehicleContainerPage;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
+import com.andreabrun.vehiclemanagement.events.PageChangedEvent;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
@@ -18,7 +21,13 @@ public class DialogDeleteVehicleAsset extends Dialog {
 	private VehicleContainer vc = null;
 	private String assetPath;
 	
-	public DialogDeleteVehicleAsset(VehicleContainer vc, String assetPath) {
+	private VehicleManagementVehicleContainerPage parent;
+	private PageChangedEventPublisher eventPublisher;
+	
+	public DialogDeleteVehicleAsset(VehicleContainer vc, String assetPath, VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+		
+		this.parent = parent;
+		this.eventPublisher = eventPublisher;
 		
 		this.vc = vc;
 		this.assetPath = assetPath;
@@ -49,6 +58,7 @@ public class DialogDeleteVehicleAsset extends Dialog {
 		if(vc != null) {
 			try {
 				vc.deleteAsset(assetPath);
+				eventPublisher.fireEvent(new PageChangedEvent(parent));
 				this.close();
 			} catch (Exception e1) {
 				Notification.show(e1.getMessage());

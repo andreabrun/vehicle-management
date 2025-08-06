@@ -1,16 +1,29 @@
 package com.andreabrun.vehiclemanagement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicleDocumentType;
 import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicle;
+import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicleDocumentType;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
+import com.andreabrun.vehiclemanagement.entities.VehicleDocumentType;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.form.ImagePickerFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleFormView;
+import com.andreabrun.vehiclemanagement.listeners.PageChangedListener;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.SelectedVehicleContainerListener;
 import com.andreabrun.vehiclemanagement.utils.StyleUtils;
+import com.andreabrun.vehiclemanagement.utils.ViewUtils;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -21,6 +34,7 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	private static final long serialVersionUID = 1L;
 	
 	private VehicleSessionBean vsbean;
+	private final PageChangedEventPublisher eventPublisher = new PageChangedEventPublisher();
 	private VehicleContainer vc;
 	
 	FlexLayout vehiclesConfiguration;
@@ -35,6 +49,11 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	VehicleFormView vehicleFormView;
 	ImagePickerFormView imagePickerFormView;
 	
+	Button buttonDeleteVDTS;
+	List<Button> buttonsDeleteVDT;
+	boolean enabledDeleteVDT = false;
+	Map<Button, DialogDeleteVehicleDocumentType> dialogsDeleteVDTMap;
+	
 	public ConfigurationView() {
 		init();
 		initComponents();
@@ -46,6 +65,8 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		
 		SelectedVehicleContainerListener listener = new SelectedVehicleContainerListener(this);
 		vsbean.addPropertyChangeListener(listener);
+		
+		eventPublisher.addListener(new PageChangedListener());
 	}
 		
 	public void setVehicleContainer(VehicleContainer vc) {
@@ -62,6 +83,10 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 	}
 	
 	private void initComponents() {
+		
+		buttonsDeleteVDT = new ArrayList<Button>();
+		dialogsDeleteVDTMap = new HashMap<Button, DialogDeleteVehicleDocumentType>();
+		
 		initDialogs();
 		add(dialogDeleteVehicle);
 		
@@ -108,6 +133,14 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 		buttonOpenAddVehicleDocumentType.getStyle().set("margin", "5px");
 		vehiclesConfiguration.add(buttonOpenAddVehicleDocumentType);
 		
+		// DELETE VEHICLE DOCUMENT TYPE
+		enabledDeleteVDT = false;
+		buttonDeleteVDTS = new Button(MessagesUtils.VEHICLE_DELETE_DOCUMENT_TYPE);
+		buttonDeleteVDTS.addClickListener( e -> {
+			this.executeEnableDeleteVDT();
+		});
+		vehiclesConfiguration.add(buttonDeleteVDTS);
+		
 		vehiclesConfiguration.setWidthFull();
 		vehiclesConfiguration.setFlexWrap(FlexLayout.FlexWrap.WRAP);
 		
@@ -133,12 +166,55 @@ public class ConfigurationView extends VerticalLayout implements VehicleManageme
 			
 			imagePickerFormView = new ImagePickerFormView(vc);
 			vehiclesConfigurationForms.add(imagePickerFormView);
+			
+			Map<String, VehicleDocumentType> documentTypes = vc.getDocumentTypes();
+			FlexLayout vehicleDocumentTypesLayout = new FlexLayout();
+			vehicleDocumentTypesLayout.setFlexWrap(FlexWrap.WRAP);
+			for(String key : documentTypes.keySet()) {
+				
+				VerticalLayout layout = new VerticalLayout();
+				
+				VehicleDocumentType vdt = documentTypes.get(key);
+				
+				List<Component> outputComponents = ViewUtils.createOutputComponents(VehicleDocumentType.class, vdt);
+				layout.add(outputComponents);
+				
+				Button buttonDeleteVDT = new Button(MessagesUtils.DELETE);
+				StyleUtils.applyStyle(buttonDeleteVDT, StyleUtils.DELETE_ASSET_DOCUMENT_BUTTON_STYLE);
+				buttonDeleteVDT.getStyle().set("display", "none");
+				
+				DialogDeleteVehicleDocumentType dialogDeleteVDT = new DialogDeleteVehicleDocumentType(vc, vdt, this, eventPublisher);
+
+				// Add Button,Dialog to Map
+				dialogsDeleteVDTMap.put(buttonDeleteVDT, dialogDeleteVDT);
+				
+				buttonDeleteVDT.addClickListener( e -> {
+					DialogDeleteVehicleDocumentType dialog = dialogsDeleteVDTMap.get(e.getSource());
+					dialog.open();
+				});
+				
+				// Add button to list of Buttons
+				buttonsDeleteVDT.add(buttonDeleteVDT);
+				layout.add(buttonDeleteVDT);
+				
+				StyleUtils.applyStyle(layout, StyleUtils.VEHICLE_DOCUMENT_TYPE_VIEW_STYLE);
+				layout.setWidth(300, Unit.PIXELS);
+				vehicleDocumentTypesLayout.add(layout);
+			}
+			vehiclesConfigurationForms.add(vehicleDocumentTypesLayout);
 		}
 		
-	}	
+	}
 	
 	private void initDialogs() {
 		dialogDeleteVehicle = new DialogDeleteVehicle(vc);
-		dialogAddVehicleDocumentType = new DialogAddVehicleDocumentType(vc);
+		dialogAddVehicleDocumentType = new DialogAddVehicleDocumentType(vc, this, eventPublisher);
+	}
+	
+	public void executeEnableDeleteVDT() {
+		for (Button button : buttonsDeleteVDT) {
+			button.getStyle().set("display", enabledDeleteVDT ? "none" : "block");
+		}
+		enabledDeleteVDT = !enabledDeleteVDT;
 	}
 }

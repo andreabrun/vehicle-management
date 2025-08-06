@@ -1,8 +1,11 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
+import com.andreabrun.vehiclemanagement.VehicleManagementVehicleContainerPage;
 import com.andreabrun.vehiclemanagement.entities.Vehicle;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEvent;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleFormView;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
@@ -27,7 +30,13 @@ public class DialogAddVehicle extends Dialog {
 	private VehicleFormView form;
 	private UploadFormView coverImageForm;
 	
-	public DialogAddVehicle() {
+	private VehicleManagementVehicleContainerPage parent;
+	private PageChangedEventPublisher eventPublisher;
+	
+	public DialogAddVehicle(VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+		
+		this.parent = parent;
+		this.eventPublisher = eventPublisher;
 		
 		init();
 		
@@ -68,6 +77,8 @@ public class DialogAddVehicle extends Dialog {
 			this.vsbean.update();
 			
 			Notification.show(MessagesUtils.VEHICLE_SAVED_SUCCESS);
+			eventPublisher.fireEvent(new PageChangedEvent(parent));
+			
 			this.close();
 		} else {
 			Notification.show(MessagesUtils.FIX_ERRORS_IN_FORM);

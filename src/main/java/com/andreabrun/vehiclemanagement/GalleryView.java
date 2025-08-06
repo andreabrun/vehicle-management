@@ -9,6 +9,8 @@ import com.andreabrun.vehiclemanagement.dialog.DialogAddVehicleAsset;
 import com.andreabrun.vehiclemanagement.dialog.DialogDeleteVehicleAsset;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
+import com.andreabrun.vehiclemanagement.listeners.PageChangedListener;
 import com.andreabrun.vehiclemanagement.utils.ComponentsUtils;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
 import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
@@ -29,6 +31,7 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 	private static final long serialVersionUID = 1L;
 
 	private VehicleSessionBean vsbean;
+	private final PageChangedEventPublisher eventPublisher = new PageChangedEventPublisher();
 	
 	private VehicleContainer vc;
 
@@ -76,6 +79,7 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		configurationLayout.add(buttonAddVehicleAsset);
 
 		// DELETE VEHICLE ASSET
+		enabledDelete = false;
 		buttonDeleteVehicleAssets = new Button(MessagesUtils.VEHICLE_DELETE_ASSETS);
 		buttonDeleteVehicleAssets.addClickListener( e -> {
 			this.executeEnableDelete();
@@ -115,7 +119,7 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 				StyleUtils.applyStyle(buttonDeleteVehicleAsset, StyleUtils.DELETE_ASSET_DOCUMENT_BUTTON_STYLE);
 				buttonDeleteVehicleAsset.getStyle().set("display", "none");
 				
-				DialogDeleteVehicleAsset dialogDeleteVehicleAsset = new DialogDeleteVehicleAsset(vc, imgPath);
+				DialogDeleteVehicleAsset dialogDeleteVehicleAsset = new DialogDeleteVehicleAsset(vc, imgPath, this, eventPublisher);
 				dialogsDeleteVehicleAssetMap.put(buttonDeleteVehicleAsset, dialogDeleteVehicleAsset);
 				
 				buttonDeleteVehicleAsset.addClickListener( e -> {
@@ -136,7 +140,7 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 	}
 	
 	private void initDialogs() {
-		dialogAddVehicleAsset = new DialogAddVehicleAsset(vc);
+		dialogAddVehicleAsset = new DialogAddVehicleAsset(vc, this, eventPublisher);
 	}
 	
 	public void setVehicleContainer(VehicleContainer vc) {
@@ -156,5 +160,7 @@ public class GalleryView extends VerticalLayout implements VehicleManagementVehi
 		
 		SelectedVehicleContainerListener listener = new SelectedVehicleContainerListener(this);
 		vsbean.addPropertyChangeListener(listener);
+		
+		eventPublisher.addListener(new PageChangedListener());
 	}
 }

@@ -2,9 +2,12 @@ package com.andreabrun.vehiclemanagement.dialog;
 
 import java.util.Set;
 
+import com.andreabrun.vehiclemanagement.VehicleManagementVehicleContainerPage;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
 import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
+import com.andreabrun.vehiclemanagement.events.PageChangedEvent;
+import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
 import com.andreabrun.vehiclemanagement.form.MultiUploadFormView;
 import com.andreabrun.vehiclemanagement.form.UploadFormView;
 import com.andreabrun.vehiclemanagement.form.VehicleDocumentFormView;
@@ -29,7 +32,13 @@ public class DialogAddVehicleDocument extends Dialog {
 	private VehicleDocumentFormView form;
 	private MultiUploadFormView uploadDocumentsForm;
 	
-	public DialogAddVehicleDocument(VehicleContainer vc) {
+	private VehicleManagementVehicleContainerPage parent;
+	private PageChangedEventPublisher eventPublisher;
+	
+	public DialogAddVehicleDocument(VehicleContainer vc, VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+	
+		this.parent = parent;
+		this.eventPublisher = eventPublisher;
 		
 		this.vc = vc;
 		init();
@@ -74,6 +83,7 @@ public class DialogAddVehicleDocument extends Dialog {
 			
 			Notification.show(MessagesUtils.VEHICLE_DOCUMENT_SAVED_SUCCESS);
 			this.vd = null;
+			eventPublisher.fireEvent(new PageChangedEvent(parent));
 			this.close();
 		} else {
 			Notification.show(MessagesUtils.ERROR);

@@ -1,50 +1,62 @@
 package com.andreabrun.vehiclemanagement.dialog;
 
+import java.util.Set;
+
 import com.andreabrun.vehiclemanagement.VehicleManagementVehicleContainerPage;
 import com.andreabrun.vehiclemanagement.entities.VehicleContainer;
-import com.andreabrun.vehiclemanagement.entities.VehicleDocumentType;
+import com.andreabrun.vehiclemanagement.entities.VehicleDocument;
 import com.andreabrun.vehiclemanagement.entities.services.VehicleSessionBean;
 import com.andreabrun.vehiclemanagement.events.PageChangedEvent;
 import com.andreabrun.vehiclemanagement.events.PageChangedEventPublisher;
-import com.andreabrun.vehiclemanagement.form.VehicleDocumentTypeFormView;
+import com.andreabrun.vehiclemanagement.form.MultiUploadFormView;
+import com.andreabrun.vehiclemanagement.form.UploadFormView;
+import com.andreabrun.vehiclemanagement.form.VehicleDocumentFormView;
 import com.andreabrun.vehiclemanagement.utils.MessagesUtils;
+import com.andreabrun.vehiclemanagement.utils.PersistenceUtils;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 
-public class DialogAddVehicleDocumentType extends Dialog {
+public class DialogEditVehicleDocument extends Dialog {
 	
 	private static final long serialVersionUID = 1L;
-	public final String title = "Add Document Type";
 	
 	private VehicleSessionBean vsbean;
 	
 	private VehicleContainer vc = null;
-	private VehicleDocumentType vdt = null;
+	private VehicleDocument vd = null;
 	
-	private VehicleDocumentTypeFormView form;
+	private VehicleDocumentFormView form;
+	private MultiUploadFormView uploadDocumentsForm;
 	
 	private VehicleManagementVehicleContainerPage parent;
 	private PageChangedEventPublisher eventPublisher;
 	
-	public DialogAddVehicleDocumentType(VehicleContainer vc, VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+	public DialogEditVehicleDocument(VehicleContainer vc, VehicleDocument vd, VehicleManagementVehicleContainerPage parent, PageChangedEventPublisher eventPublisher) {
+	
+		this.vc = vc;
+		this.vd = vd;
 		
 		this.parent = parent;
 		this.eventPublisher = eventPublisher;
-		
-		this.vc = vc;
+
 		init();
 		
-		if(vc != null) {
-			setHeaderTitle(title);
-			form = new VehicleDocumentTypeFormView(vdt, vc);
+		if(vc != null & vd != null) {
+			setHeaderTitle(MessagesUtils.VEHICLE_EDIT_DOCUMENTS);
+			form = new VehicleDocumentFormView(vd, vc);
 			add(form);
+			
+			NativeLabel addDocumentsTitle = new NativeLabel("Upload documents");
+			uploadDocumentsForm = new MultiUploadFormView(10, UploadFormView.TYPE_DOCUMENT);
+			add(addDocumentsTitle, uploadDocumentsForm);
 			
 			Button buttonSave = new Button("Save");
 			Button buttonCancel = new Button("Cancel", e -> {
-				this.vdt = null;
+				this.vd = vd;
 				this.close();
 			});
 			
@@ -63,16 +75,20 @@ public class DialogAddVehicleDocumentType extends Dialog {
 	private void save(ClickEvent<?> e) {
 		
 		if(form.validate()) {
-			vdt = form.getVehicleDocumentType();
-			this.vc.addDocumentType(vdt);
-			this.vc.persist();
+			vd = form.getVehicleDocument();
+			this.vd.persist();
 			
-			Notification.show("Tipo documento salvato correttamente!");
-			this.vdt = null;
+			Set<String> filenames = uploadDocumentsForm.getFilenames();
+			if(filenames != null && filenames.size() > 0) {
+				PersistenceUtils.saveUploadedDocuments(uploadDocumentsForm.getBuffer(), vd);
+			}
+			
+			Notification.show(MessagesUtils.VEHICLE_DOCUMENT_SAVED_SUCCESS);
+			this.vd = null;
 			eventPublisher.fireEvent(new PageChangedEvent(parent));
 			this.close();
 		} else {
-			Notification.show("Correggere gli errori nel Form!");
+			Notification.show(MessagesUtils.ERROR);
 		}
 		
 	}
@@ -83,7 +99,7 @@ public class DialogAddVehicleDocumentType extends Dialog {
 			vc = vsbean.getSelected();
 		
 		if(vc != null)
-			vdt = new VehicleDocumentType();
+			vd = new VehicleDocument(vc);
 	}
 
 }

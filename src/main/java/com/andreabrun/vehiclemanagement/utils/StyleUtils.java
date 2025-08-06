@@ -26,6 +26,11 @@ public class StyleUtils {
 			.set("margin-left", "5px").set("margin-right", "5px")
 			.set("margin-bottom", "5px").set("border-radius", "15px").set("background-color", "#F5F5F5");
 	
+	public static Style VEHICLE_DOCUMENT_TYPE_VIEW_STYLE = new Div().getStyle().set("overflow", "hidden")
+			.set("margin-left", "5px").set("margin-right", "5px").set("position", "relative")
+			.set("margin-bottom", "5px").set("border-radius", "15px").set("background-color", "#F5F5F5")
+			.set("height", "fit-content");
+	
 	public static Style VIEW_UTILS_LABEL_STYLE = new Div().getStyle().set("font-weight", "bold").set("float", "left").set("width", "50%");
 	public static Style VIEW_UTILS_VALUE_STYLE = new Div().getStyle().set("float", "right").set("width", "50%");
 	public static Style VIEW_UTILS_CONTAINER_STYLE = new Div().getStyle().set("display", "flex").set("width", "100%");
@@ -47,6 +52,9 @@ public class StyleUtils {
 	public static Style DELETE_ASSET_DOCUMENT_BUTTON_STYLE = new Div().getStyle().set("position", "absolute").set("top","5px").set("right", "10px")
 			.set("background-color", "red").set("border-radius", "10px").set("cursor", "pointer")
 			.set("color", "white").set("border", "1px solid white");
+	
+	public static Style EDIT_ASSET_DOCUMENT_BUTTON_STYLE = new Div().getStyle().set("position", "absolute").set("top","5px").set("right", "10px")
+			.set("border-radius", "10px").set("cursor", "pointer").set("color", "black");
 	
 	public static Style GALLERY_VIEW_IMAGE_DIV_STYLE = new Div().getStyle().set("overflow", "hidden")
 			.set("vertical-align", "center").set("border-radius", "15px").set("display", "flex").set("justify-content", "center").set("margin", "5px");
